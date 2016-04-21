@@ -12,6 +12,8 @@ class SearchViewController: UIViewController {
 
     var searchView: SearchView!
     
+    private let resultsSegueIdentifier = "ShowResults"
+    
     private var didSetupConstraints = false
     
     override func viewDidLoad() {
@@ -21,7 +23,10 @@ class SearchViewController: UIViewController {
 
     func setupView() {
         searchView = SearchView.newAutoLayoutView()
+        searchView.delegate = self
         view.addSubview(searchView)
+        
+        navigationItem.title = "Virtual Sitter"
     }
     
     override func updateViewConstraints() {
@@ -31,6 +36,14 @@ class SearchViewController: UIViewController {
         }
         
         super.updateViewConstraints()
+    }
+}
+
+// MARK: - Search View Delegate
+
+extension SearchViewController: SearchViewDelegate {
+    func searchButtonWasClicked(searchView: SearchView, sender: UIButton!) {
+        performSegueWithIdentifier(resultsSegueIdentifier, sender: sender)
     }
 }
 
