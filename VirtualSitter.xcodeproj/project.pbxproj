@@ -7,14 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		710293C600A412C025707D60 /* Pods_VirtualSitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70423C953AF87214C75C991 /* Pods_VirtualSitter.framework */; };
 		B5AFA64F1CC0883100B358A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA64E1CC0883100B358A2 /* AppDelegate.swift */; };
-		B5AFA6511CC0883100B358A2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA6501CC0883100B358A2 /* ViewController.swift */; };
+		B5AFA6511CC0883100B358A2 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA6501CC0883100B358A2 /* SearchViewController.swift */; };
 		B5AFA6541CC0883100B358A2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5AFA6521CC0883100B358A2 /* Main.storyboard */; };
 		B5AFA6571CC0883100B358A2 /* VirtualSitter.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA6551CC0883100B358A2 /* VirtualSitter.xcdatamodeld */; };
 		B5AFA6591CC0883100B358A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5AFA6581CC0883100B358A2 /* Assets.xcassets */; };
 		B5AFA65C1CC0883100B358A2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5AFA65A1CC0883100B358A2 /* LaunchScreen.storyboard */; };
 		B5AFA6671CC0883100B358A2 /* VirtualSitterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA6661CC0883100B358A2 /* VirtualSitterTests.swift */; };
 		B5AFA6721CC0883100B358A2 /* VirtualSitterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA6711CC0883100B358A2 /* VirtualSitterUITests.swift */; };
+		B5F0690C1CC7D9C900ACE75D /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F0690B1CC7D9C900ACE75D /* SearchView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,9 +37,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		21997C8B5B7A25B972229D31 /* Pods-VirtualSitter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VirtualSitter.release.xcconfig"; path = "Pods/Target Support Files/Pods-VirtualSitter/Pods-VirtualSitter.release.xcconfig"; sourceTree = "<group>"; };
 		B5AFA64B1CC0883100B358A2 /* VirtualSitter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualSitter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5AFA64E1CC0883100B358A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		B5AFA6501CC0883100B358A2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B5AFA6501CC0883100B358A2 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		B5AFA6531CC0883100B358A2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B5AFA6561CC0883100B358A2 /* VirtualSitter.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VirtualSitter.xcdatamodel; sourceTree = "<group>"; };
 		B5AFA6581CC0883100B358A2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -49,6 +52,9 @@
 		B5AFA66D1CC0883100B358A2 /* VirtualSitterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VirtualSitterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5AFA6711CC0883100B358A2 /* VirtualSitterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualSitterUITests.swift; sourceTree = "<group>"; };
 		B5AFA6731CC0883100B358A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B5F0690B1CC7D9C900ACE75D /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		B8D3A3153E5BD1998BEAC5E6 /* Pods-VirtualSitter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VirtualSitter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VirtualSitter/Pods-VirtualSitter.debug.xcconfig"; sourceTree = "<group>"; };
+		F70423C953AF87214C75C991 /* Pods_VirtualSitter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VirtualSitter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				710293C600A412C025707D60 /* Pods_VirtualSitter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,6 +83,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		33E7A1B7DC325F75CB6CDED9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F70423C953AF87214C75C991 /* Pods_VirtualSitter.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3A307D41BE7F600ACF906BCC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B8D3A3153E5BD1998BEAC5E6 /* Pods-VirtualSitter.debug.xcconfig */,
+				21997C8B5B7A25B972229D31 /* Pods-VirtualSitter.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		B5AFA6421CC0883100B358A2 = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +107,8 @@
 				B5AFA6651CC0883100B358A2 /* VirtualSitterTests */,
 				B5AFA6701CC0883100B358A2 /* VirtualSitterUITests */,
 				B5AFA64C1CC0883100B358A2 /* Products */,
+				3A307D41BE7F600ACF906BCC /* Pods */,
+				33E7A1B7DC325F75CB6CDED9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -100,7 +126,8 @@
 			isa = PBXGroup;
 			children = (
 				B5AFA64E1CC0883100B358A2 /* AppDelegate.swift */,
-				B5AFA6501CC0883100B358A2 /* ViewController.swift */,
+				B5AFA6501CC0883100B358A2 /* SearchViewController.swift */,
+				B5F0690B1CC7D9C900ACE75D /* SearchView.swift */,
 				B5AFA6521CC0883100B358A2 /* Main.storyboard */,
 				B5AFA6581CC0883100B358A2 /* Assets.xcassets */,
 				B5AFA65A1CC0883100B358A2 /* LaunchScreen.storyboard */,
@@ -135,9 +162,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B5AFA6761CC0883100B358A2 /* Build configuration list for PBXNativeTarget "VirtualSitter" */;
 			buildPhases = (
+				F19DD6BF40423940F539B531 /* Check Pods Manifest.lock */,
 				B5AFA6471CC0883100B358A2 /* Sources */,
 				B5AFA6481CC0883100B358A2 /* Frameworks */,
 				B5AFA6491CC0883100B358A2 /* Resources */,
+				B7948E7F03F67FA41D997A0E /* Embed Pods Frameworks */,
+				E59A5DF270CE93F1EC24A800 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -254,12 +284,61 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		B7948E7F03F67FA41D997A0E /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-VirtualSitter/Pods-VirtualSitter-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E59A5DF270CE93F1EC24A800 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-VirtualSitter/Pods-VirtualSitter-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F19DD6BF40423940F539B531 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		B5AFA6471CC0883100B358A2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B5AFA6511CC0883100B358A2 /* ViewController.swift in Sources */,
+				B5F0690C1CC7D9C900ACE75D /* SearchView.swift in Sources */,
+				B5AFA6511CC0883100B358A2 /* SearchViewController.swift in Sources */,
 				B5AFA64F1CC0883100B358A2 /* AppDelegate.swift in Sources */,
 				B5AFA6571CC0883100B358A2 /* VirtualSitter.xcdatamodeld in Sources */,
 			);
@@ -403,6 +482,7 @@
 		};
 		B5AFA6771CC0883100B358A2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B8D3A3153E5BD1998BEAC5E6 /* Pods-VirtualSitter.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = VirtualSitter/Info.plist;
@@ -414,6 +494,7 @@
 		};
 		B5AFA6781CC0883100B358A2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 21997C8B5B7A25B972229D31 /* Pods-VirtualSitter.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = VirtualSitter/Info.plist;
@@ -488,6 +569,7 @@
 				B5AFA6781CC0883100B358A2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B5AFA6791CC0883100B358A2 /* Build configuration list for PBXNativeTarget "VirtualSitterTests" */ = {
 			isa = XCConfigurationList;
@@ -496,6 +578,7 @@
 				B5AFA67B1CC0883100B358A2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B5AFA67C1CC0883100B358A2 /* Build configuration list for PBXNativeTarget "VirtualSitterUITests" */ = {
 			isa = XCConfigurationList;
@@ -504,6 +587,7 @@
 				B5AFA67E1CC0883100B358A2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
