@@ -9,6 +9,10 @@
 import UIKit
 import PureLayout
 
+protocol SearchViewDelegate: class {
+    func searchButtonWasClicked(searchView: SearchView, sender: UIButton!)
+}
+
 class SearchView: UIView {
 
     // MARK: - Views
@@ -35,6 +39,8 @@ class SearchView: UIView {
     private var locationInput: UITextField!
     
     private var searchButton: UIButton!
+    
+    weak var delegate: SearchViewDelegate?
     
     private var didSetupConstraints = false
     
@@ -133,6 +139,7 @@ class SearchView: UIView {
         searchButton.translatesAutoresizingMaskIntoConstraints = false
         searchButton.setTitle("Search", forState: .Normal)
         searchButton.backgroundColor = .redColor()
+        searchButton.addTarget(self, action: #selector(searchButtonClicked), forControlEvents: .TouchUpInside)
         addSubview(searchButton)
     }
     
@@ -202,5 +209,9 @@ class SearchView: UIView {
     
     func dismissKeyboard() {
         endEditing(true)
+    }
+    
+    func searchButtonClicked(sender: UIButton!) {
+        delegate?.searchButtonWasClicked(self, sender: sender)
     }
 }
