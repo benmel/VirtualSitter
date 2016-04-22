@@ -17,6 +17,7 @@
 		B5AFA6671CC0883100B358A2 /* VirtualSitterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA6661CC0883100B358A2 /* VirtualSitterTests.swift */; };
 		B5AFA6721CC0883100B358A2 /* VirtualSitterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA6711CC0883100B358A2 /* VirtualSitterUITests.swift */; };
 		B5DED1DE1CC96FC700266F8E /* ResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DED1DD1CC96FC700266F8E /* ResultsViewController.swift */; };
+		B5DED1E01CC9787E00266F8E /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DED1DF1CC9787E00266F8E /* ResultViewController.swift */; };
 		B5F0690C1CC7D9C900ACE75D /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F0690B1CC7D9C900ACE75D /* SearchView.swift */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +55,7 @@
 		B5AFA6711CC0883100B358A2 /* VirtualSitterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualSitterUITests.swift; sourceTree = "<group>"; };
 		B5AFA6731CC0883100B358A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5DED1DD1CC96FC700266F8E /* ResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsViewController.swift; sourceTree = "<group>"; };
+		B5DED1DF1CC9787E00266F8E /* ResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
 		B5F0690B1CC7D9C900ACE75D /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		B8D3A3153E5BD1998BEAC5E6 /* Pods-VirtualSitter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VirtualSitter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VirtualSitter/Pods-VirtualSitter.debug.xcconfig"; sourceTree = "<group>"; };
 		F70423C953AF87214C75C991 /* Pods_VirtualSitter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VirtualSitter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				B5AFA64E1CC0883100B358A2 /* AppDelegate.swift */,
+				B5DED1DF1CC9787E00266F8E /* ResultViewController.swift */,
 				B5DED1DD1CC96FC700266F8E /* ResultsViewController.swift */,
 				B5AFA6501CC0883100B358A2 /* SearchViewController.swift */,
 				B5F0690B1CC7D9C900ACE75D /* SearchView.swift */,
@@ -345,6 +348,7 @@
 				B5AFA64F1CC0883100B358A2 /* AppDelegate.swift in Sources */,
 				B5DED1DE1CC96FC700266F8E /* ResultsViewController.swift in Sources */,
 				B5AFA6571CC0883100B358A2 /* VirtualSitter.xcdatamodeld in Sources */,
+				B5DED1E01CC9787E00266F8E /* ResultViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
