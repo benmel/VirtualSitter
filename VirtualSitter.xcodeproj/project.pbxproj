@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		710293C600A412C025707D60 /* Pods_VirtualSitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70423C953AF87214C75C991 /* Pods_VirtualSitter.framework */; };
+		B592490D1CCAA4F3005A76D2 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B592490C1CCAA4F3005A76D2 /* ResultsView.swift */; };
 		B5AFA64F1CC0883100B358A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA64E1CC0883100B358A2 /* AppDelegate.swift */; };
 		B5AFA6511CC0883100B358A2 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA6501CC0883100B358A2 /* SearchViewController.swift */; };
 		B5AFA6541CC0883100B358A2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5AFA6521CC0883100B358A2 /* Main.storyboard */; };
@@ -40,6 +41,7 @@
 
 /* Begin PBXFileReference section */
 		21997C8B5B7A25B972229D31 /* Pods-VirtualSitter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VirtualSitter.release.xcconfig"; path = "Pods/Target Support Files/Pods-VirtualSitter/Pods-VirtualSitter.release.xcconfig"; sourceTree = "<group>"; };
+		B592490C1CCAA4F3005A76D2 /* ResultsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
 		B5AFA64B1CC0883100B358A2 /* VirtualSitter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualSitter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5AFA64E1CC0883100B358A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B5AFA6501CC0883100B358A2 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				B5AFA64E1CC0883100B358A2 /* AppDelegate.swift */,
 				B5DED1DF1CC9787E00266F8E /* ResultViewController.swift */,
 				B5DED1DD1CC96FC700266F8E /* ResultsViewController.swift */,
+				B592490C1CCAA4F3005A76D2 /* ResultsView.swift */,
 				B5AFA6501CC0883100B358A2 /* SearchViewController.swift */,
 				B5F0690B1CC7D9C900ACE75D /* SearchView.swift */,
 				B5AFA6521CC0883100B358A2 /* Main.storyboard */,
@@ -347,6 +350,7 @@
 				B5AFA6511CC0883100B358A2 /* SearchViewController.swift in Sources */,
 				B5AFA64F1CC0883100B358A2 /* AppDelegate.swift in Sources */,
 				B5DED1DE1CC96FC700266F8E /* ResultsViewController.swift in Sources */,
+				B592490D1CCAA4F3005A76D2 /* ResultsView.swift in Sources */,
 				B5AFA6571CC0883100B358A2 /* VirtualSitter.xcdatamodeld in Sources */,
 				B5DED1E01CC9787E00266F8E /* ResultViewController.swift in Sources */,
 			);

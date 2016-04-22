@@ -10,7 +10,8 @@ import UIKit
 
 class ResultsViewController: UIViewController {
 
-    var resultsTable: UITableView!
+    var resultsView: ResultsView!
+    
     private let cellIdentifier = "TableCell"
     private let results = ["Result 1", "Result 2", "Result 3", "Result 4", "Result 5", "Result 6"]
     private let resultSegueIdentifier = "ShowResult"
@@ -20,22 +21,21 @@ class ResultsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupTable()
+        setupView()
     }
-
-    func setupTable() {
-        resultsTable = UITableView.newAutoLayoutView()
-        resultsTable.dataSource = self
-        resultsTable.delegate = self
-        resultsTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        view.addSubview(resultsTable)
+    
+    func setupView() {
+        resultsView = ResultsView(tableViewDataSource: self, tableViewDelegate: self, cellIdentifier: cellIdentifier)
+        resultsView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(resultsView)
     }
     
     // MARK: - Layout
     
     override func updateViewConstraints() {
         if !didSetupConstraints {
-            resultsTable.autoPinEdgesToSuperviewEdges()
+            resultsView.autoPinEdgesToSuperviewEdges()
+            didSetupConstraints = true
         }
         
         super.updateViewConstraints()
