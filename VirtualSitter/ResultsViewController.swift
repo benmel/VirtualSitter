@@ -13,6 +13,9 @@ class ResultsViewController: UIViewController {
     var resultsTable: UITableView!
     private let cellIdentifier = "TableCell"
     private let results = ["Result 1", "Result 2", "Result 3", "Result 4", "Result 5", "Result 6"]
+    private let resultSegueIdentifier = "ShowResult"
+    private var selectedResult = ""
+    
     private var didSetupConstraints = false
     
     override func viewDidLoad() {
@@ -23,9 +26,12 @@ class ResultsViewController: UIViewController {
     func setupTable() {
         resultsTable = UITableView.newAutoLayoutView()
         resultsTable.dataSource = self
+        resultsTable.delegate = self
         resultsTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         view.addSubview(resultsTable)
     }
+    
+    // MARK: - Layout
     
     override func updateViewConstraints() {
         if !didSetupConstraints {
@@ -33,6 +39,15 @@ class ResultsViewController: UIViewController {
         }
         
         super.updateViewConstraints()
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == resultSegueIdentifier {
+            let resultViewController = segue.destinationViewController as! ResultViewController
+            resultViewController.resultText = selectedResult
+        }
     }
 }
 
@@ -45,5 +60,13 @@ extension ResultsViewController: UITableViewDataSource {
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return results.count
+    }
+}
+
+extension ResultsViewController: UITableViewDelegate {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        selectedResult = results[indexPath.row]
+        performSegueWithIdentifier(resultSegueIdentifier, sender: self)
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 }
