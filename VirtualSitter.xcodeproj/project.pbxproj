@@ -131,17 +131,10 @@
 		B5AFA64D1CC0883100B358A2 /* VirtualSitter */ = {
 			isa = PBXGroup;
 			children = (
-				B5AFA64E1CC0883100B358A2 /* AppDelegate.swift */,
-				B5DED1DF1CC9787E00266F8E /* ResultViewController.swift */,
-				B5DED1DD1CC96FC700266F8E /* ResultsViewController.swift */,
-				B592490C1CCAA4F3005A76D2 /* ResultsView.swift */,
-				B5AFA6501CC0883100B358A2 /* SearchViewController.swift */,
-				B5F0690B1CC7D9C900ACE75D /* SearchView.swift */,
-				B5AFA6521CC0883100B358A2 /* Main.storyboard */,
+				B5DDF5821CCFB3180005A3FF /* Controllers */,
+				B5DDF5831CCFB31F0005A3FF /* Views */,
+				B5DDF5841CCFB3260005A3FF /* Application */,
 				B5AFA6581CC0883100B358A2 /* Assets.xcassets */,
-				B5AFA65A1CC0883100B358A2 /* LaunchScreen.storyboard */,
-				B5AFA65D1CC0883100B358A2 /* Info.plist */,
-				B5AFA6551CC0883100B358A2 /* VirtualSitter.xcdatamodeld */,
 			);
 			path = VirtualSitter;
 			sourceTree = "<group>";
@@ -162,6 +155,37 @@
 				B5AFA6731CC0883100B358A2 /* Info.plist */,
 			);
 			path = VirtualSitterUITests;
+			sourceTree = "<group>";
+		};
+		B5DDF5821CCFB3180005A3FF /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				B5AFA6501CC0883100B358A2 /* SearchViewController.swift */,
+				B5DED1DF1CC9787E00266F8E /* ResultViewController.swift */,
+				B5DED1DD1CC96FC700266F8E /* ResultsViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		B5DDF5831CCFB31F0005A3FF /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B592490C1CCAA4F3005A76D2 /* ResultsView.swift */,
+				B5F0690B1CC7D9C900ACE75D /* SearchView.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		B5DDF5841CCFB3260005A3FF /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				B5AFA64E1CC0883100B358A2 /* AppDelegate.swift */,
+				B5AFA6521CC0883100B358A2 /* Main.storyboard */,
+				B5AFA65A1CC0883100B358A2 /* LaunchScreen.storyboard */,
+				B5AFA6551CC0883100B358A2 /* VirtualSitter.xcdatamodeld */,
+				B5AFA65D1CC0883100B358A2 /* Info.plist */,
+			);
+			name = Application;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
