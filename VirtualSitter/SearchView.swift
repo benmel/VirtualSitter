@@ -30,15 +30,40 @@ class SearchView: UIView {
     private var buildingLabel: UILabel!
     private var locationLabel: UILabel!
     
-    private var startTimeInput: UITextField!
-    private var endTimeInput: UITextField!
-    private var roomInput: UITextField!
-    private var floorInput: UITextField!
-    private var kinectInput: UITextField!
-    private var buildingInput: UITextField!
-    private var locationInput: UITextField!
+    private var startTimeInput: SearchTextField!
+    private var endTimeInput: SearchTextField!
+    private var roomInput: SearchTextField!
+    private var floorInput: SearchTextField!
+    private var kinectInput: SearchTextField!
+    private var buildingInput: SearchTextField!
+    private var locationInput: SearchTextField!
+    
+    private var startTimePicker: UIDatePicker!
+    private var endTimePicker: UIDatePicker!
+    private var roomPicker: UIPickerView!
+    private var floorPicker: UIPickerView!
+    private var kinectPicker: UIPickerView!
+    private var buildingPicker: UIPickerView!
+    private var locationPicker: UIPickerView!
+    
+    private var roomDataSource: PickerViewDataSource?
+    private var roomDelegate: PickerViewDelegate?
+    private var floorDataSource: PickerViewDataSource?
+    private var floorDelegate: PickerViewDelegate?
+    private var kinectDataSource: PickerViewDataSource?
+    private var kinectDelegate: PickerViewDelegate?
+    private var buildingDataSource: PickerViewDataSource?
+    private var buildingDelegate: PickerViewDelegate?
+    private var locationDataSource: PickerViewDataSource?
+    private var locationDelegate: PickerViewDelegate?
     
     private var searchButton: UIButton!
+    
+    private let roomNotification = "RoomDidChange"
+    private let floorNotification = "FloorDidChange"
+    private let kinectNotification = "KinectDidChange"
+    private let buildingNotification = "BuildingDidChange"
+    private let locationNotification = "LocationDidChange"
     
     weak var delegate: SearchViewDelegate?
     
@@ -64,6 +89,8 @@ class SearchView: UIView {
         setupViews()
         setupLabels()
         setupInputs()
+        setupPickers()
+        addObservers()
         setupButton()
     }
     
@@ -109,13 +136,13 @@ class SearchView: UIView {
         inputsView = UIView.newAutoLayoutView()
         addSubview(inputsView)
         
-        startTimeInput = UITextField.newAutoLayoutView()
-        endTimeInput = UITextField.newAutoLayoutView()
-        roomInput = UITextField.newAutoLayoutView()
-        floorInput = UITextField.newAutoLayoutView()
-        kinectInput = UITextField.newAutoLayoutView()
-        buildingInput = UITextField.newAutoLayoutView()
-        locationInput = UITextField.newAutoLayoutView()
+        startTimeInput = SearchTextField.newAutoLayoutView()
+        endTimeInput = SearchTextField.newAutoLayoutView()
+        roomInput = SearchTextField.newAutoLayoutView()
+        floorInput = SearchTextField.newAutoLayoutView()
+        kinectInput = SearchTextField.newAutoLayoutView()
+        buildingInput = SearchTextField.newAutoLayoutView()
+        locationInput = SearchTextField.newAutoLayoutView()
         
         startTimeInput.backgroundColor = .whiteColor()
         endTimeInput.backgroundColor = .whiteColor()
@@ -124,6 +151,14 @@ class SearchView: UIView {
         kinectInput.backgroundColor = .whiteColor()
         buildingInput.backgroundColor = .whiteColor()
         locationInput.backgroundColor = .whiteColor()
+        
+        startTimeInput.delegate = self
+        endTimeInput.delegate = self
+        roomInput.delegate = self
+        floorInput.delegate = self
+        kinectInput.delegate = self
+        buildingInput.delegate = self
+        locationInput.delegate = self
         
         inputsView.addSubview(startTimeInput)
         inputsView.addSubview(endTimeInput)
@@ -134,6 +169,77 @@ class SearchView: UIView {
         inputsView.addSubview(locationInput)
     }
     
+    func setupPickers() {        
+        let toolbar = UIToolbar()
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(title: "Done", style: .Done, target: self, action: #selector(dismissKeyboard))
+        toolbar.setItems([flexibleSpace, doneButton], animated: false)
+        toolbar.sizeToFit()
+        
+        startTimePicker = UIDatePicker()
+        startTimePicker.addTarget(self, action: #selector(startTimeChanged), forControlEvents: .ValueChanged)
+        startTimeInput.inputView = startTimePicker
+        startTimeInput.inputAccessoryView = toolbar
+        
+        endTimePicker = UIDatePicker()
+        endTimePicker.addTarget(self, action: #selector(endTimeChanged), forControlEvents: .ValueChanged)
+        endTimeInput.inputView = endTimePicker
+        endTimeInput.inputAccessoryView = toolbar
+        
+        roomPicker = UIPickerView()
+        let roomDataStore = DataStore(data: ["Select a room", "Room 1", "Room 2", "Room 3"])
+        roomDataSource = PickerViewDataSource(dataStore: roomDataStore)
+        roomDelegate = PickerViewDelegate(dataStore: roomDataStore, notificationName: roomNotification)
+        roomPicker.dataSource = roomDataSource
+        roomPicker.delegate = roomDelegate
+        roomInput.inputView = roomPicker
+        roomInput.inputAccessoryView = toolbar
+        
+        floorPicker = UIPickerView()
+        let floorDataStore = DataStore(data: ["Select a floor", "Floor 1", "Floor 2"])
+        floorDataSource = PickerViewDataSource(dataStore: floorDataStore)
+        floorDelegate = PickerViewDelegate(dataStore: floorDataStore, notificationName: floorNotification)
+        floorPicker.dataSource = floorDataSource
+        floorPicker.delegate = floorDelegate
+        floorInput.inputView = floorPicker
+        floorInput.inputAccessoryView = toolbar
+        
+        kinectPicker = UIPickerView()
+        let kinectDataStore = DataStore(data: ["Select a Kinect", "Kinect 1", "Kinect 2", "Kinect 3"])
+        kinectDataSource = PickerViewDataSource(dataStore: kinectDataStore)
+        kinectDelegate = PickerViewDelegate(dataStore: kinectDataStore, notificationName: kinectNotification)
+        kinectPicker.dataSource = kinectDataSource
+        kinectPicker.delegate = kinectDelegate
+        kinectInput.inputView = kinectPicker
+        kinectInput.inputAccessoryView = toolbar
+
+        buildingPicker = UIPickerView()
+        let buildingDataStore = DataStore(data: ["Select a building", "Building 1", "Building 2", "Building 3", "Building 4"])
+        buildingDataSource = PickerViewDataSource(dataStore: buildingDataStore)
+        buildingDelegate = PickerViewDelegate(dataStore: buildingDataStore, notificationName: buildingNotification)
+        buildingPicker.dataSource = buildingDataSource
+        buildingPicker.delegate = buildingDelegate
+        buildingInput.inputView = buildingPicker
+        buildingInput.inputAccessoryView = toolbar
+
+        locationPicker = UIPickerView()
+        let locationDataStore = DataStore(data: ["Select a location", "Location 1", "Location 2"])
+        locationDataSource = PickerViewDataSource(dataStore: locationDataStore)
+        locationDelegate = PickerViewDelegate(dataStore: locationDataStore, notificationName: locationNotification)
+        locationPicker.dataSource = locationDataSource
+        locationPicker.delegate = locationDelegate
+        locationInput.inputView = locationPicker
+        locationInput.inputAccessoryView = toolbar
+    }
+    
+    func addObservers() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(roomPickerChanged), name: roomNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(floorPickerChanged), name: floorNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(kinectPickerChanged), name: kinectNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(buildingPickerChanged), name: buildingNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(locationPickerChanged), name: locationNotification, object: nil)
+    }
+    
     func setupButton() {
         searchButton = UIButton(type: .Custom)
         searchButton.translatesAutoresizingMaskIntoConstraints = false
@@ -141,6 +247,12 @@ class SearchView: UIView {
         searchButton.backgroundColor = .redColor()
         searchButton.addTarget(self, action: #selector(searchButtonClicked), forControlEvents: .TouchUpInside)
         addSubview(searchButton)
+    }
+    
+    // MARK: - Deinitialization
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     // MARK - Layout
@@ -190,9 +302,9 @@ class SearchView: UIView {
             locationInput.autoPinEdgeToSuperviewMargin(.Leading)
             locationInput.autoPinEdgeToSuperviewMargin(.Trailing)
             
-            [startTimeLabel, endTimeLabel, roomLabel, floorLabel, kinectLabel, buildingLabel, locationLabel].autoDistributeViewsAlongAxis(.Vertical, alignedTo: .Leading, withFixedSize: 20, insetSpacing: true)
+            [startTimeLabel, endTimeLabel, roomLabel, floorLabel, kinectLabel, buildingLabel, locationLabel].autoDistributeViewsAlongAxis(.Vertical, alignedTo: .Leading, withFixedSize: 24, insetSpacing: true)
             
-            [startTimeInput, endTimeInput, roomInput, floorInput, kinectInput, buildingInput, locationInput].autoDistributeViewsAlongAxis(.Vertical, alignedTo: .Leading, withFixedSize: 20, insetSpacing: true)
+            [startTimeInput, endTimeInput, roomInput, floorInput, kinectInput, buildingInput, locationInput].autoDistributeViewsAlongAxis(.Vertical, alignedTo: .Leading, withFixedSize: 24, insetSpacing: true)
             
             searchButton.autoAlignAxisToSuperviewAxis(.Vertical)
             searchButton.autoPinEdgeToSuperviewEdge(.Bottom, withInset: 20)
@@ -211,7 +323,54 @@ class SearchView: UIView {
         endEditing(true)
     }
     
+    func startTimeChanged(sender: UIDatePicker) {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateStyle = .ShortStyle
+        dateFormatter.timeStyle = .ShortStyle
+        startTimeInput.text = dateFormatter.stringFromDate(sender.date)
+    }
+    
+    func endTimeChanged(sender: UIDatePicker) {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateStyle = .ShortStyle
+        dateFormatter.timeStyle = .ShortStyle
+        endTimeInput.text = dateFormatter.stringFromDate(sender.date)
+    }
+    
     func searchButtonClicked(sender: UIButton!) {
         delegate?.searchButtonWasClicked(self, sender: sender)
+    }
+    
+    func roomPickerChanged(notification: NSNotification) {
+        guard let userInfo = notification.userInfo, let roomValue = userInfo["value"] as? String else { return }
+        roomInput.text = roomValue
+    }
+    
+    func floorPickerChanged(notification: NSNotification) {
+        guard let userInfo = notification.userInfo, let floorValue = userInfo["value"] as? String else { return }
+        floorInput.text = floorValue
+    }
+    
+    func kinectPickerChanged(notification: NSNotification) {
+        guard let userInfo = notification.userInfo, let kinectValue = userInfo["value"] as? String else { return }
+        kinectInput.text = kinectValue
+    }
+    
+    func buildingPickerChanged(notification: NSNotification) {
+        guard let userInfo = notification.userInfo, let buildingValue = userInfo["value"] as? String else { return }
+        buildingInput.text = buildingValue
+    }
+    
+    func locationPickerChanged(notification: NSNotification) {
+        guard let userInfo = notification.userInfo, let locationValue = userInfo["value"] as? String else { return }
+        locationInput.text = locationValue
+    }
+}
+
+// MARK: - Text Field Delegate
+
+extension SearchView: UITextFieldDelegate {
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        return false
     }
 }

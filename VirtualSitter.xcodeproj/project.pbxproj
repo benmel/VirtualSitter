@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		710293C600A412C025707D60 /* Pods_VirtualSitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70423C953AF87214C75C991 /* Pods_VirtualSitter.framework */; };
+		B50076931CD0061D003BF7B4 /* PickerViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50076921CD0061D003BF7B4 /* PickerViewDataSource.swift */; };
+		B50076951CD0062D003BF7B4 /* PickerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50076941CD0062D003BF7B4 /* PickerViewDelegate.swift */; };
+		B50076971CD01871003BF7B4 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50076961CD01871003BF7B4 /* DataStore.swift */; };
+		B581AF8A1CD14354002449E6 /* SearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B581AF891CD14354002449E6 /* SearchTextField.swift */; };
 		B592490D1CCAA4F3005A76D2 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B592490C1CCAA4F3005A76D2 /* ResultsView.swift */; };
 		B5AFA64F1CC0883100B358A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA64E1CC0883100B358A2 /* AppDelegate.swift */; };
 		B5AFA6511CC0883100B358A2 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA6501CC0883100B358A2 /* SearchViewController.swift */; };
@@ -41,6 +45,10 @@
 
 /* Begin PBXFileReference section */
 		21997C8B5B7A25B972229D31 /* Pods-VirtualSitter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VirtualSitter.release.xcconfig"; path = "Pods/Target Support Files/Pods-VirtualSitter/Pods-VirtualSitter.release.xcconfig"; sourceTree = "<group>"; };
+		B50076921CD0061D003BF7B4 /* PickerViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerViewDataSource.swift; sourceTree = "<group>"; };
+		B50076941CD0062D003BF7B4 /* PickerViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerViewDelegate.swift; sourceTree = "<group>"; };
+		B50076961CD01871003BF7B4 /* DataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
+		B581AF891CD14354002449E6 /* SearchTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTextField.swift; sourceTree = "<group>"; };
 		B592490C1CCAA4F3005A76D2 /* ResultsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
 		B5AFA64B1CC0883100B358A2 /* VirtualSitter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualSitter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5AFA64E1CC0883100B358A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -131,6 +139,9 @@
 		B5AFA64D1CC0883100B358A2 /* VirtualSitter */ = {
 			isa = PBXGroup;
 			children = (
+				B50076961CD01871003BF7B4 /* DataStore.swift */,
+				B50076921CD0061D003BF7B4 /* PickerViewDataSource.swift */,
+				B50076941CD0062D003BF7B4 /* PickerViewDelegate.swift */,
 				B5DDF5821CCFB3180005A3FF /* Controllers */,
 				B5DDF5831CCFB31F0005A3FF /* Views */,
 				B5DDF5841CCFB3260005A3FF /* Application */,
@@ -172,6 +183,7 @@
 			children = (
 				B592490C1CCAA4F3005A76D2 /* ResultsView.swift */,
 				B5F0690B1CC7D9C900ACE75D /* SearchView.swift */,
+				B581AF891CD14354002449E6 /* SearchTextField.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -259,6 +271,7 @@
 				TargetAttributes = {
 					B5AFA64A1CC0883100B358A2 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = UVPP4AX2B4;
 					};
 					B5AFA6611CC0883100B358A2 = {
 						CreatedOnToolsVersion = 7.3;
@@ -370,12 +383,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B50076971CD01871003BF7B4 /* DataStore.swift in Sources */,
+				B581AF8A1CD14354002449E6 /* SearchTextField.swift in Sources */,
 				B5F0690C1CC7D9C900ACE75D /* SearchView.swift in Sources */,
+				B50076931CD0061D003BF7B4 /* PickerViewDataSource.swift in Sources */,
 				B5AFA6511CC0883100B358A2 /* SearchViewController.swift in Sources */,
 				B5AFA64F1CC0883100B358A2 /* AppDelegate.swift in Sources */,
 				B5DED1DE1CC96FC700266F8E /* ResultsViewController.swift in Sources */,
 				B592490D1CCAA4F3005A76D2 /* ResultsView.swift in Sources */,
 				B5AFA6571CC0883100B358A2 /* VirtualSitter.xcdatamodeld in Sources */,
+				B50076951CD0062D003BF7B4 /* PickerViewDelegate.swift in Sources */,
 				B5DED1E01CC9787E00266F8E /* ResultViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -521,10 +538,13 @@
 			baseConfigurationReference = B8D3A3153E5BD1998BEAC5E6 /* Pods-VirtualSitter.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = VirtualSitter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.benmeline.VirtualSitter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -533,10 +553,13 @@
 			baseConfigurationReference = 21997C8B5B7A25B972229D31 /* Pods-VirtualSitter.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = VirtualSitter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.benmeline.VirtualSitter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
