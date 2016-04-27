@@ -24,7 +24,8 @@ class PickerViewDelegate: NSObject, UIPickerViewDelegate {
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let value = dataStore.dataAtRow(row)
+        // The first row is just a message
+        let value = row > 0 ? dataStore.dataAtRow(row) : ""
         NSNotificationCenter.defaultCenter().postNotificationName(notificationName, object: nil, userInfo: ["value": value])
     }
 }
