@@ -30,14 +30,16 @@ class SearchView: UIView {
     private var buildingLabel: UILabel!
     private var locationLabel: UILabel!
     
-    private var startTimeInput: UITextField!
-    private var endTimeInput: UITextField!
+    private var startTimeInput: SearchTextField!
+    private var endTimeInput: SearchTextField!
     private var roomInput: SearchTextField!
     private var floorInput: SearchTextField!
     private var kinectInput: SearchTextField!
     private var buildingInput: SearchTextField!
     private var locationInput: SearchTextField!
     
+    private var startTimePicker: UIDatePicker!
+    private var endTimePicker: UIDatePicker!
     private var roomPicker: UIPickerView!
     private var floorPicker: UIPickerView!
     private var kinectPicker: UIPickerView!
@@ -134,8 +136,8 @@ class SearchView: UIView {
         inputsView = UIView.newAutoLayoutView()
         addSubview(inputsView)
         
-        startTimeInput = UITextField.newAutoLayoutView()
-        endTimeInput = UITextField.newAutoLayoutView()
+        startTimeInput = SearchTextField.newAutoLayoutView()
+        endTimeInput = SearchTextField.newAutoLayoutView()
         roomInput = SearchTextField.newAutoLayoutView()
         floorInput = SearchTextField.newAutoLayoutView()
         kinectInput = SearchTextField.newAutoLayoutView()
@@ -150,6 +152,8 @@ class SearchView: UIView {
         buildingInput.backgroundColor = .whiteColor()
         locationInput.backgroundColor = .whiteColor()
         
+        startTimeInput.delegate = self
+        endTimeInput.delegate = self
         roomInput.delegate = self
         floorInput.delegate = self
         kinectInput.delegate = self
@@ -171,6 +175,16 @@ class SearchView: UIView {
         let doneButton = UIBarButtonItem(title: "Done", style: .Done, target: self, action: #selector(dismissKeyboard))
         toolbar.setItems([flexibleSpace, doneButton], animated: false)
         toolbar.sizeToFit()
+        
+        startTimePicker = UIDatePicker()
+        startTimePicker.addTarget(self, action: #selector(startTimeChanged), forControlEvents: .ValueChanged)
+        startTimeInput.inputView = startTimePicker
+        startTimeInput.inputAccessoryView = toolbar
+        
+        endTimePicker = UIDatePicker()
+        endTimePicker.addTarget(self, action: #selector(endTimeChanged), forControlEvents: .ValueChanged)
+        endTimeInput.inputView = endTimePicker
+        endTimeInput.inputAccessoryView = toolbar
         
         roomPicker = UIPickerView()
         let roomDataStore = DataStore(data: ["Select a room", "Room 1", "Room 2", "Room 3"])
@@ -288,9 +302,9 @@ class SearchView: UIView {
             locationInput.autoPinEdgeToSuperviewMargin(.Leading)
             locationInput.autoPinEdgeToSuperviewMargin(.Trailing)
             
-            [startTimeLabel, endTimeLabel, roomLabel, floorLabel, kinectLabel, buildingLabel, locationLabel].autoDistributeViewsAlongAxis(.Vertical, alignedTo: .Leading, withFixedSize: 20, insetSpacing: true)
+            [startTimeLabel, endTimeLabel, roomLabel, floorLabel, kinectLabel, buildingLabel, locationLabel].autoDistributeViewsAlongAxis(.Vertical, alignedTo: .Leading, withFixedSize: 24, insetSpacing: true)
             
-            [startTimeInput, endTimeInput, roomInput, floorInput, kinectInput, buildingInput, locationInput].autoDistributeViewsAlongAxis(.Vertical, alignedTo: .Leading, withFixedSize: 20, insetSpacing: true)
+            [startTimeInput, endTimeInput, roomInput, floorInput, kinectInput, buildingInput, locationInput].autoDistributeViewsAlongAxis(.Vertical, alignedTo: .Leading, withFixedSize: 24, insetSpacing: true)
             
             searchButton.autoAlignAxisToSuperviewAxis(.Vertical)
             searchButton.autoPinEdgeToSuperviewEdge(.Bottom, withInset: 20)
@@ -307,6 +321,20 @@ class SearchView: UIView {
     
     func dismissKeyboard() {
         endEditing(true)
+    }
+    
+    func startTimeChanged(sender: UIDatePicker) {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateStyle = .ShortStyle
+        dateFormatter.timeStyle = .ShortStyle
+        startTimeInput.text = dateFormatter.stringFromDate(sender.date)
+    }
+    
+    func endTimeChanged(sender: UIDatePicker) {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateStyle = .ShortStyle
+        dateFormatter.timeStyle = .ShortStyle
+        endTimeInput.text = dateFormatter.stringFromDate(sender.date)
     }
     
     func searchButtonClicked(sender: UIButton!) {

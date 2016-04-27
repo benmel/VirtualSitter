@@ -9,6 +9,20 @@
 import UIKit
 
 class SearchTextField: UITextField {
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        initialize()
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        initialize()
+    }
+    
+    func initialize() {
+        layer.cornerRadius = 4
+    }
+    
     override func caretRectForPosition(position: UITextPosition) -> CGRect {
         return CGRectZero
     }
