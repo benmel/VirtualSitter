@@ -44,7 +44,20 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: SearchViewDelegate {
     func searchButtonWasClicked(searchView: SearchView, sender: UIButton!) {
-        performSegueWithIdentifier(resultsSegueIdentifier, sender: sender)
+        if inputsValid() {
+            performSegueWithIdentifier(resultsSegueIdentifier, sender: sender)
+        } else {
+            let alert = UIAlertController(title: nil, message: "Enter a value for all inputs", preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { _ in }))
+            presentViewController(alert, animated: true, completion: { _ in })
+        }
+    }
+    
+    func inputsValid() -> Bool {
+        for (_, value) in searchView.getInputs() {
+            if value.isEmpty { return false }
+        }
+        return true
     }
 }
 

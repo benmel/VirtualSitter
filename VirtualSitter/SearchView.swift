@@ -365,6 +365,20 @@ class SearchView: UIView {
         guard let userInfo = notification.userInfo, let locationValue = userInfo["value"] as? String else { return }
         locationInput.text = locationValue
     }
+    
+    // MARK: - Input Values
+    
+    func getInputs() -> [String: String] {
+        var inputValues = [String: String]()
+        inputValues["startTime"] = startTimeInput.text
+        inputValues["endTime"] = endTimeInput.text
+        inputValues["room"] = roomInput.text
+        inputValues["floor"] = floorInput.text
+        inputValues["kinect"] = kinectInput.text
+        inputValues["building"] = buildingInput.text
+        inputValues["location"] = locationInput.text
+        return inputValues
+    }
 }
 
 // MARK: - Text Field Delegate
