@@ -17,7 +17,9 @@ class ResultsView: UIView {
     private var queryLabel: UILabel!
     private var displayControl: UISegmentedControl!
     private var resultsTable: UITableView!
+    private var displayView: UIView!
     private var videoView: UIView!
+    private var activityView: UIView!
     
     private var didSetupConstraints = false
     
@@ -59,11 +61,20 @@ class ResultsView: UIView {
         displayControl = UISegmentedControl(items: ["Video", "Activity"])
         displayControl.translatesAutoresizingMaskIntoConstraints = false
         displayControl.selectedSegmentIndex = 0
+        displayControl.addTarget(self, action: #selector(displayChanged), forControlEvents: .ValueChanged)
         topView.addSubview(displayControl)
+        
+        displayView = UIView.newAutoLayoutView()
+        addSubview(displayView)
         
         videoView = UIView.newAutoLayoutView()
         videoView.backgroundColor = .darkGrayColor()
-        addSubview(videoView)
+        displayView.addSubview(videoView)
+        
+        activityView = UIView.newAutoLayoutView()
+        activityView.backgroundColor = .purpleColor()
+        activityView.hidden = true
+        displayView.addSubview(activityView)
         
         resultsTable = UITableView.newAutoLayoutView()
         addSubview(resultsTable)
@@ -94,20 +105,37 @@ class ResultsView: UIView {
             displayControl.autoSetDimension(.Width, toSize: 160)
             displayControl.autoSetDimension(.Height, toSize: 30)
 
-            videoView.autoPinEdge(.Top, toEdge: .Bottom, ofView: topView)
-            videoView.autoPinEdgeToSuperviewEdge(.Leading)
-            videoView.autoPinEdgeToSuperviewEdge(.Trailing)
+            displayView.autoPinEdge(.Top, toEdge: .Bottom, ofView: topView)
+            displayView.autoPinEdgeToSuperviewEdge(.Leading)
+            displayView.autoPinEdgeToSuperviewEdge(.Trailing)
+            
+            videoView.autoPinEdgesToSuperviewEdges()
+            activityView.autoPinEdgesToSuperviewEdges()
             
             resultsTable.autoPinEdgeToSuperviewEdge(.Bottom)
             resultsTable.autoPinEdgeToSuperviewEdge(.Leading)
             resultsTable.autoPinEdgeToSuperviewEdge(.Trailing)
             
-            resultsTable.autoPinEdge(.Top, toEdge: .Bottom, ofView: videoView)
-            resultsTable.autoMatchDimension(.Height, toDimension: .Height, ofView: videoView)
+            resultsTable.autoPinEdge(.Top, toEdge: .Bottom, ofView: displayView)
+            resultsTable.autoMatchDimension(.Height, toDimension: .Height, ofView: displayView)
             
             didSetupConstraints = true
         }
 
         super.updateConstraints()
     }
+    
+    // MARK: - User Interaction
+    
+    func displayChanged(sender: UISegmentedControl) {
+        if sender.selectedSegmentIndex == 0 {
+            videoView.hidden = false
+            activityView.hidden = true
+        } else {
+            videoView.hidden = true
+            activityView.hidden = false
+        }
+    }
+    
+    
 }
