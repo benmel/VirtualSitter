@@ -35,7 +35,11 @@ class ResultsViewController: UIViewController {
     
     override func updateViewConstraints() {
         if !didSetupConstraints {
-            resultsView.autoPinEdgesToSuperviewEdges()
+            resultsView.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
+            resultsView.autoPinEdgeToSuperviewEdge(.Bottom)
+            resultsView.autoPinEdgeToSuperviewEdge(.Leading)
+            resultsView.autoPinEdgeToSuperviewEdge(.Trailing)
+            
             didSetupConstraints = true
         }
         
