@@ -45,15 +45,6 @@ class ResultsViewController: UIViewController {
         
         super.updateViewConstraints()
     }
-    
-    // MARK: - Navigation
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == resultSegueIdentifier {
-            let resultViewController = segue.destinationViewController as! ResultViewController
-            resultViewController.resultText = selectedResult
-        }
-    }
 }
 
 extension ResultsViewController: UITableViewDataSource {
@@ -71,7 +62,6 @@ extension ResultsViewController: UITableViewDataSource {
 extension ResultsViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         selectedResult = results[indexPath.row]
-        performSegueWithIdentifier(resultSegueIdentifier, sender: self)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 }
