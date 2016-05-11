@@ -39,9 +39,10 @@ class ResultsView: UIView {
         self.init(frame: CGRectZero)
     }
     
-    convenience init(playerView: UIView, tableViewDataSource: UITableViewDataSource, tableViewDelegate: UITableViewDelegate, cellIdentifier: String) {
+    convenience init(playerView: UIView, activityView: UIView, tableViewDataSource: UITableViewDataSource, tableViewDelegate: UITableViewDelegate, cellIdentifier: String) {
         self.init(frame: CGRectZero)
         setupPlayerView(playerView)
+        setupActivityView(activityView)
         setupTable(tableViewDataSource, tableViewDelegate: tableViewDelegate, cellIdentifier: cellIdentifier)
     }
     
@@ -68,11 +69,6 @@ class ResultsView: UIView {
         displayView = UIView.newAutoLayoutView()
         addSubview(displayView)
         
-        activityView = UIView.newAutoLayoutView()
-        activityView.backgroundColor = .purpleColor()
-        activityView.hidden = true
-        displayView.addSubview(activityView)
-        
         resultsTable = UITableView.newAutoLayoutView()
         addSubview(resultsTable)
     }
@@ -80,6 +76,12 @@ class ResultsView: UIView {
     func setupPlayerView(playerView: UIView) {
         self.playerView = playerView
         displayView.addSubview(self.playerView)
+    }
+    
+    func setupActivityView(activityView: UIView) {
+        self.activityView = activityView
+        activityView.hidden = true
+        displayView.addSubview(activityView)
     }
     
     func setupTable(tableViewDataSource: UITableViewDataSource, tableViewDelegate: UITableViewDelegate, cellIdentifier: String) {
