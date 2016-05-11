@@ -18,7 +18,7 @@ class ResultsView: UIView {
     private var displayControl: UISegmentedControl!
     private var resultsTable: UITableView!
     private var displayView: UIView!
-    private var videoView: UIView!
+    private var playerView: UIView!
     private var activityView: UIView!
     
     private var didSetupConstraints = false
@@ -39,8 +39,9 @@ class ResultsView: UIView {
         self.init(frame: CGRectZero)
     }
     
-    convenience init(tableViewDataSource: UITableViewDataSource, tableViewDelegate: UITableViewDelegate, cellIdentifier: String) {
+    convenience init(playerView: UIView, tableViewDataSource: UITableViewDataSource, tableViewDelegate: UITableViewDelegate, cellIdentifier: String) {
         self.init(frame: CGRectZero)
+        setupPlayerView(playerView)
         setupTable(tableViewDataSource, tableViewDelegate: tableViewDelegate, cellIdentifier: cellIdentifier)
     }
     
@@ -67,10 +68,6 @@ class ResultsView: UIView {
         displayView = UIView.newAutoLayoutView()
         addSubview(displayView)
         
-        videoView = UIView.newAutoLayoutView()
-        videoView.backgroundColor = .darkGrayColor()
-        displayView.addSubview(videoView)
-        
         activityView = UIView.newAutoLayoutView()
         activityView.backgroundColor = .purpleColor()
         activityView.hidden = true
@@ -78,6 +75,11 @@ class ResultsView: UIView {
         
         resultsTable = UITableView.newAutoLayoutView()
         addSubview(resultsTable)
+    }
+    
+    func setupPlayerView(playerView: UIView) {
+        self.playerView = playerView
+        displayView.addSubview(self.playerView)
     }
     
     func setupTable(tableViewDataSource: UITableViewDataSource, tableViewDelegate: UITableViewDelegate, cellIdentifier: String) {
@@ -109,7 +111,7 @@ class ResultsView: UIView {
             displayView.autoPinEdgeToSuperviewEdge(.Leading)
             displayView.autoPinEdgeToSuperviewEdge(.Trailing)
             
-            videoView.autoPinEdgesToSuperviewEdges()
+            playerView.autoPinEdgesToSuperviewEdges()
             activityView.autoPinEdgesToSuperviewEdges()
             
             resultsTable.autoPinEdgeToSuperviewEdge(.Bottom)
@@ -129,10 +131,10 @@ class ResultsView: UIView {
     
     func displayChanged(sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
-            videoView.hidden = false
+            playerView.hidden = false
             activityView.hidden = true
         } else {
-            videoView.hidden = true
+            playerView.hidden = true
             activityView.hidden = false
         }
     }

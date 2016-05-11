@@ -8,6 +8,8 @@
 
 import UIKit
 import PureLayout
+import AVKit
+import AVFoundation
 
 class ResultsViewController: UIViewController {
 
@@ -26,9 +28,18 @@ class ResultsViewController: UIViewController {
     }
     
     func setupView() {
-        resultsView = ResultsView(tableViewDataSource: self, tableViewDelegate: self, cellIdentifier: cellIdentifier)
+        let url = NSBundle.mainBundle().URLForResource("local_video", withExtension: "m4v")
+        let player = AVPlayer(URL: url!)
+        let playerViewController = AVPlayerViewController()
+        playerViewController.player = player
+        playerViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        addChildViewController(playerViewController)
+        
+        resultsView = ResultsView(playerView: playerViewController.view, tableViewDataSource: self, tableViewDelegate: self, cellIdentifier: cellIdentifier)
         resultsView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(resultsView)
+        
+        playerViewController.didMoveToParentViewController(self)
     }
     
     // MARK: - Layout
