@@ -11,6 +11,7 @@ import PureLayout
 import AVKit
 import AVFoundation
 import Charts
+import ReactiveCocoa
 
 class ResultsViewController: UIViewController {
     
@@ -41,6 +42,7 @@ class ResultsViewController: UIViewController {
         setupDisplayView()
         setupPlayerView()
         setupActivityView()
+        setupControlSignals()
         setupResultsTable()
     }
     
@@ -61,8 +63,6 @@ class ResultsViewController: UIViewController {
         displayControl = UISegmentedControl(items: ["Video", "Activity"])
         displayControl.translatesAutoresizingMaskIntoConstraints = false
         displayControl.selectedSegmentIndex = 0
-        //        reactive for target
-        //        displayControl.addTarget(self, action: #selector(displayChanged), forControlEvents: .ValueChanged)
         topView.addSubview(displayControl)
     }
     
@@ -110,9 +110,21 @@ class ResultsViewController: UIViewController {
         numberFormatter.minimumFractionDigits = 0
         activityView.leftAxis.valueFormatter = numberFormatter
         activityView.backgroundColor = UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 1.0)
-
-        activityView.hidden = true
         displayView.addSubview(activityView)
+    }
+    
+    func setupControlSignals() {
+        playerView.hidden = false
+        activityView.hidden = true
+        
+        displayControl
+            .rac_signalForControlEvents(.ValueChanged)
+            .map { sender in sender as! UISegmentedControl }
+            .map { $0.selectedSegmentIndex }
+            .subscribeNext { [unowned self] index in
+                self.playerView.hidden = (index as! Int) != 0
+                self.activityView.hidden = (index as! Int) != 1
+            }
     }
     
     func setupResultsTable() {
