@@ -12,7 +12,6 @@
 		B50076951CD0062D003BF7B4 /* PickerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50076941CD0062D003BF7B4 /* PickerViewDelegate.swift */; };
 		B50076971CD01871003BF7B4 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50076961CD01871003BF7B4 /* DataStore.swift */; };
 		B581AF8A1CD14354002449E6 /* SearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B581AF891CD14354002449E6 /* SearchTextField.swift */; };
-		B592490D1CCAA4F3005A76D2 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B592490C1CCAA4F3005A76D2 /* ResultsView.swift */; };
 		B5AFA64F1CC0883100B358A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA64E1CC0883100B358A2 /* AppDelegate.swift */; };
 		B5AFA6511CC0883100B358A2 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA6501CC0883100B358A2 /* SearchViewController.swift */; };
 		B5AFA6541CC0883100B358A2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5AFA6521CC0883100B358A2 /* Main.storyboard */; };
@@ -49,7 +48,6 @@
 		B50076941CD0062D003BF7B4 /* PickerViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerViewDelegate.swift; sourceTree = "<group>"; };
 		B50076961CD01871003BF7B4 /* DataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		B581AF891CD14354002449E6 /* SearchTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTextField.swift; sourceTree = "<group>"; };
-		B592490C1CCAA4F3005A76D2 /* ResultsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
 		B5AFA64B1CC0883100B358A2 /* VirtualSitter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualSitter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5AFA64E1CC0883100B358A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B5AFA6501CC0883100B358A2 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -195,7 +193,6 @@
 		B5DDF5831CCFB31F0005A3FF /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				B592490C1CCAA4F3005A76D2 /* ResultsView.swift */,
 				B5F0690B1CC7D9C900ACE75D /* SearchView.swift */,
 				B581AF891CD14354002449E6 /* SearchTextField.swift */,
 				B50076921CD0061D003BF7B4 /* PickerViewDataSource.swift */,
@@ -407,7 +404,6 @@
 				B5AFA6511CC0883100B358A2 /* SearchViewController.swift in Sources */,
 				B5AFA64F1CC0883100B358A2 /* AppDelegate.swift in Sources */,
 				B5DED1DE1CC96FC700266F8E /* ResultsViewController.swift in Sources */,
-				B592490D1CCAA4F3005A76D2 /* ResultsView.swift in Sources */,
 				B5AFA6571CC0883100B358A2 /* VirtualSitter.xcdatamodeld in Sources */,
 				B50076951CD0062D003BF7B4 /* PickerViewDelegate.swift in Sources */,
 			);
