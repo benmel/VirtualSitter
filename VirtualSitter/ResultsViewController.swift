@@ -25,6 +25,7 @@ class ResultsViewController: UIViewController {
     private let cellIdentifier = "TableCell"
     private var results = [String]()
     private var selectedResult = ""
+    private var events = [NSDictionary]()
     
     private var topView: UIView!
     private var queryLabel: UILabel!
@@ -43,6 +44,8 @@ class ResultsViewController: UIViewController {
     
     func setupViews() {
         getVideos()
+        getEvents()
+        
         setupTopView()
         setupQueryLabel()
         setupDisplayControl()
@@ -94,21 +97,48 @@ class ResultsViewController: UIViewController {
     func setupActivityView() {
         activityView = LineChartView()
         
-        let days = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"]
-        let walking = [2, 3, 4, 1, 0, 5, 6]
+        var days = [NSDate]()
+        var fall = [Int]()
+        
+        let inputDateFormatter = NSDateFormatter()
+        inputDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        
+        let outputDateFormatter = NSDateFormatter()
+        outputDateFormatter.dateFormat = "MM-dd"
+        
+        let calendar = NSCalendar.currentCalendar()
+        
+        for event in events {
+            let date = inputDateFormatter.dateFromString(event["startTime"] as! String)
+            if let lastDay = days.last {
+                if calendar.compareDate(date!, toDate: lastDay, toUnitGranularity: .Day) == .OrderedSame {
+                    fall[fall.count-1] += 1
+                } else {
+                    days.append(date!)
+                    fall.append(1)
+                }
+            } else {
+                days.append(date!)
+                fall.append(1)
+            }
+        }
         
         var yVals = [ChartDataEntry]()
-        for (index, element) in walking.enumerate() {
+        for (index, element) in fall.enumerate() {
             yVals.append(ChartDataEntry(value: Double(element), xIndex: index))
         }
         
-        let chartDataSet = LineChartDataSet(yVals: yVals, label: "Walking")
+        let xVals = days.map { day in
+            outputDateFormatter.stringFromDate(day)
+        }
+        
+        let chartDataSet = LineChartDataSet(yVals: yVals, label: "Fall")
         chartDataSet.setColor(UIColor.redColor().colorWithAlphaComponent(0.5))
         chartDataSet.setCircleColor(UIColor.redColor().colorWithAlphaComponent(0.7))
         chartDataSet.lineWidth = 2.0
         chartDataSet.circleRadius = 4.0
         chartDataSet.drawValuesEnabled = false
-        let chartData = LineChartData(xVals: days, dataSet: chartDataSet)
+        let chartData = LineChartData(xVals: xVals, dataSet: chartDataSet)
         activityView.data = chartData
         
         activityView.descriptionText = ""
@@ -179,6 +209,40 @@ class ResultsViewController: UIViewController {
                     print("Interrupted")
                 }
             }
+    }
+    
+    func getEvents() {
+        let session = NSURLSession.sharedSession()
+        let url = "http://129.105.36.182/mobile/event_query.php?"
+        let parameters = "start=\(startTime)&end=\(endTime)&room=\(room)&kinectId=\(kinect)&event=fall".stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLPathAllowedCharacterSet())
+        let request = NSURLRequest(URL: NSURL(string: url + parameters!)!)
+        
+        let producer = session.rac_dataWithRequest(request)
+        producer
+            .on(failed: {e in print("Failure")})
+            .retry(5)
+            .start { [unowned self] event in
+                switch event {
+                case let .Next(next):
+                    do {
+                        let JSON = try NSJSONSerialization.JSONObjectWithData(next.0, options: .MutableContainers)
+                        guard let JSONArray = JSON as? [NSDictionary] else {
+                            print("Not an array")
+                            return
+                        }
+                        self.events = JSONArray
+                    }
+                    catch let JSONError as NSError {
+                        print("\(JSONError)")
+                    }
+                case let .Failed(error):
+                    print("Failed: \(error)")
+                case .Completed:
+                    print("Completed Events")
+                case .Interrupted:
+                    print("Interrupted")
+                }
+        }
     }
     
     // MARK: - Layout
