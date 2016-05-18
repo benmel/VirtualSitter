@@ -15,9 +15,15 @@ import ReactiveCocoa
 
 class ResultsViewController: UIViewController {
     
+    var startTime: String!
+    var endTime: String!
+    var room: String!
+    var floor: String!
+    var kinect: String!
+    var building: String!
+    
     private let cellIdentifier = "TableCell"
-    private let results = ["Result 1", "Result 2", "Result 3", "Result 4", "Result 5", "Result 6"]
-    private let resultSegueIdentifier = "ShowResult"
+    private var results = [String]()
     private var selectedResult = ""
     
     private var topView: UIView!
@@ -36,6 +42,7 @@ class ResultsViewController: UIViewController {
     }
     
     func setupViews() {
+        getVideos()
         setupTopView()
         setupQueryLabel()
         setupDisplayControl()
@@ -53,7 +60,7 @@ class ResultsViewController: UIViewController {
     
     func setupQueryLabel() {
         queryLabel = UILabel.newAutoLayoutView()
-        queryLabel.text = "Start: 1:00, End: 2:00, Room: 1, Floor: 1, Kinect: 1, Building: Smith"
+        queryLabel.text = "Start: \(startTime), End: \(endTime), Room: \(room), Floor: \(floor), Kinect: \(kinect), Building: \(building)"
         queryLabel.font = UIFont.systemFontOfSize(12)
         queryLabel.numberOfLines = 2
         topView.addSubview(queryLabel)
@@ -72,7 +79,8 @@ class ResultsViewController: UIViewController {
     }
     
     func setupPlayerView() {
-        let url = NSBundle.mainBundle().URLForResource("local_video", withExtension: "m4v")
+//        let url = NSBundle.mainBundle().URLForResource("local_video", withExtension: "m4v")
+        let url = NSURL(string: "http://129.105.36.182/webfile/testvideo/20150304_172923.mp4")
         let player = AVPlayer(URL: url!)
         let playerViewController = AVPlayerViewController()
         playerViewController.player = player
@@ -133,6 +141,44 @@ class ResultsViewController: UIViewController {
         resultsTable.delegate = self
         resultsTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         view.addSubview(resultsTable)
+    }
+    
+    func getVideos() {
+        let session = NSURLSession.sharedSession()
+        let url = "http://129.105.36.182/firstqueryVideo.php?"
+        let parameters = "from=\(startTime)&to=\(endTime)&room=\(room)&kinect=\(kinect)".stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLPathAllowedCharacterSet())
+        let request = NSURLRequest(URL: NSURL(string: url + parameters!)!)
+        
+        // need to update table after receiving data
+        let producer = session.rac_dataWithRequest(request)
+        producer
+            .on(failed: {e in print("Failure")})
+            .retry(5)
+            .start { [unowned self] event in
+                switch event {
+                case let .Next(next):
+                    do {
+                        let JSON = try NSJSONSerialization.JSONObjectWithData(next.0, options: .MutableContainers)
+                        guard let JSONArray = JSON as? [NSDictionary] else {
+                            print("Not an array")
+                            return
+                        }
+                        for r in JSONArray {
+                            let file = r["FilePath"] as! String
+                            self.results.append(file)
+                        }
+                    }
+                    catch let JSONError as NSError {
+                        print("\(JSONError)")
+                    }
+                case let .Failed(error):
+                    print("Failed: \(error)")
+                case .Completed:
+                    print("Completed")
+                case .Interrupted:
+                    print("Interrupted")
+                }
+            }
     }
     
     // MARK: - Layout

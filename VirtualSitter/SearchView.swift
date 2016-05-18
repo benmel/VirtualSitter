@@ -187,7 +187,7 @@ class SearchView: UIView {
         endTimeInput.inputAccessoryView = toolbar
         
         roomPicker = UIPickerView()
-        let roomDataStore = DataStore(data: ["Select a room", "Room 1", "Room 2", "Room 3"])
+        let roomDataStore = DataStore(data: ["Select a room", "1", "112", "218", "312", "1236"])
         roomDataSource = PickerViewDataSource(dataStore: roomDataStore)
         roomDelegate = PickerViewDelegate(dataStore: roomDataStore, notificationName: roomNotification)
         roomPicker.dataSource = roomDataSource
@@ -205,7 +205,7 @@ class SearchView: UIView {
         floorInput.inputAccessoryView = toolbar
         
         kinectPicker = UIPickerView()
-        let kinectDataStore = DataStore(data: ["Select a Kinect", "Kinect 1", "Kinect 2", "Kinect 3"])
+        let kinectDataStore = DataStore(data: ["Select a Kinect", "1", "2"])
         kinectDataSource = PickerViewDataSource(dataStore: kinectDataStore)
         kinectDelegate = PickerViewDelegate(dataStore: kinectDataStore, notificationName: kinectNotification)
         kinectPicker.dataSource = kinectDataSource
@@ -325,15 +325,17 @@ class SearchView: UIView {
     
     func startTimeChanged(sender: UIDatePicker) {
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = .ShortStyle
-        dateFormatter.timeStyle = .ShortStyle
+//        dateFormatter.dateStyle = .ShortStyle
+//        dateFormatter.timeStyle = .ShortStyle
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss";
         startTimeInput.text = dateFormatter.stringFromDate(sender.date)
     }
     
     func endTimeChanged(sender: UIDatePicker) {
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = .ShortStyle
-        dateFormatter.timeStyle = .ShortStyle
+//        dateFormatter.dateStyle = .ShortStyle
+//        dateFormatter.timeStyle = .ShortStyle
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss";
         endTimeInput.text = dateFormatter.stringFromDate(sender.date)
     }
     
