@@ -28,7 +28,6 @@ class SearchView: UIView {
     private var floorLabel: UILabel!
     private var kinectLabel: UILabel!
     private var buildingLabel: UILabel!
-    private var locationLabel: UILabel!
     
     private var startTimeInput: SearchTextField!
     private var endTimeInput: SearchTextField!
@@ -36,7 +35,6 @@ class SearchView: UIView {
     private var floorInput: SearchTextField!
     private var kinectInput: SearchTextField!
     private var buildingInput: SearchTextField!
-    private var locationInput: SearchTextField!
     
     private var startTimePicker: UIDatePicker!
     private var endTimePicker: UIDatePicker!
@@ -44,7 +42,6 @@ class SearchView: UIView {
     private var floorPicker: UIPickerView!
     private var kinectPicker: UIPickerView!
     private var buildingPicker: UIPickerView!
-    private var locationPicker: UIPickerView!
     
     private var roomDataSource: PickerViewDataSource?
     private var roomDelegate: PickerViewDelegate?
@@ -54,8 +51,6 @@ class SearchView: UIView {
     private var kinectDelegate: PickerViewDelegate?
     private var buildingDataSource: PickerViewDataSource?
     private var buildingDelegate: PickerViewDelegate?
-    private var locationDataSource: PickerViewDataSource?
-    private var locationDelegate: PickerViewDelegate?
     
     private var searchButton: UIButton!
     
@@ -63,7 +58,6 @@ class SearchView: UIView {
     private let floorNotification = "FloorDidChange"
     private let kinectNotification = "KinectDidChange"
     private let buildingNotification = "BuildingDidChange"
-    private let locationNotification = "LocationDidChange"
     
     weak var delegate: SearchViewDelegate?
     
@@ -113,7 +107,6 @@ class SearchView: UIView {
         floorLabel = UILabel.newAutoLayoutView()
         kinectLabel = UILabel.newAutoLayoutView()
         buildingLabel = UILabel.newAutoLayoutView()
-        locationLabel = UILabel.newAutoLayoutView()
         
         startTimeLabel.text = "Start Time"
         endTimeLabel.text = "End Time"
@@ -121,7 +114,6 @@ class SearchView: UIView {
         floorLabel.text = "Floor"
         kinectLabel.text = "Kinect"
         buildingLabel.text = "Building"
-        locationLabel.text = "Location"
         
         labelsView.addSubview(startTimeLabel)
         labelsView.addSubview(endTimeLabel)
@@ -129,7 +121,6 @@ class SearchView: UIView {
         labelsView.addSubview(floorLabel)
         labelsView.addSubview(kinectLabel)
         labelsView.addSubview(buildingLabel)
-        labelsView.addSubview(locationLabel)
     }
     
     func setupInputs() {
@@ -142,7 +133,6 @@ class SearchView: UIView {
         floorInput = SearchTextField.newAutoLayoutView()
         kinectInput = SearchTextField.newAutoLayoutView()
         buildingInput = SearchTextField.newAutoLayoutView()
-        locationInput = SearchTextField.newAutoLayoutView()
         
         startTimeInput.backgroundColor = .whiteColor()
         endTimeInput.backgroundColor = .whiteColor()
@@ -150,7 +140,6 @@ class SearchView: UIView {
         floorInput.backgroundColor = .whiteColor()
         kinectInput.backgroundColor = .whiteColor()
         buildingInput.backgroundColor = .whiteColor()
-        locationInput.backgroundColor = .whiteColor()
         
         startTimeInput.delegate = self
         endTimeInput.delegate = self
@@ -158,7 +147,6 @@ class SearchView: UIView {
         floorInput.delegate = self
         kinectInput.delegate = self
         buildingInput.delegate = self
-        locationInput.delegate = self
         
         inputsView.addSubview(startTimeInput)
         inputsView.addSubview(endTimeInput)
@@ -166,7 +154,6 @@ class SearchView: UIView {
         inputsView.addSubview(floorInput)
         inputsView.addSubview(kinectInput)
         inputsView.addSubview(buildingInput)
-        inputsView.addSubview(locationInput)
     }
     
     func setupPickers() {        
@@ -187,7 +174,7 @@ class SearchView: UIView {
         endTimeInput.inputAccessoryView = toolbar
         
         roomPicker = UIPickerView()
-        let roomDataStore = DataStore(data: ["Select a room", "Room 1", "Room 2", "Room 3"])
+        let roomDataStore = DataStore(data: ["Select a room", "1", "112", "218", "312", "1236"])
         roomDataSource = PickerViewDataSource(dataStore: roomDataStore)
         roomDelegate = PickerViewDelegate(dataStore: roomDataStore, notificationName: roomNotification)
         roomPicker.dataSource = roomDataSource
@@ -205,7 +192,7 @@ class SearchView: UIView {
         floorInput.inputAccessoryView = toolbar
         
         kinectPicker = UIPickerView()
-        let kinectDataStore = DataStore(data: ["Select a Kinect", "Kinect 1", "Kinect 2", "Kinect 3"])
+        let kinectDataStore = DataStore(data: ["Select a Kinect", "1", "2"])
         kinectDataSource = PickerViewDataSource(dataStore: kinectDataStore)
         kinectDelegate = PickerViewDelegate(dataStore: kinectDataStore, notificationName: kinectNotification)
         kinectPicker.dataSource = kinectDataSource
@@ -221,15 +208,6 @@ class SearchView: UIView {
         buildingPicker.delegate = buildingDelegate
         buildingInput.inputView = buildingPicker
         buildingInput.inputAccessoryView = toolbar
-
-        locationPicker = UIPickerView()
-        let locationDataStore = DataStore(data: ["Select a location", "Location 1", "Location 2"])
-        locationDataSource = PickerViewDataSource(dataStore: locationDataStore)
-        locationDelegate = PickerViewDelegate(dataStore: locationDataStore, notificationName: locationNotification)
-        locationPicker.dataSource = locationDataSource
-        locationPicker.delegate = locationDelegate
-        locationInput.inputView = locationPicker
-        locationInput.inputAccessoryView = toolbar
     }
     
     func addObservers() {
@@ -237,7 +215,6 @@ class SearchView: UIView {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(floorPickerChanged), name: floorNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(kinectPickerChanged), name: kinectNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(buildingPickerChanged), name: buildingNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(locationPickerChanged), name: locationNotification, object: nil)
     }
     
     func setupButton() {
@@ -284,8 +261,6 @@ class SearchView: UIView {
             kinectLabel.autoPinEdgeToSuperviewEdge(.Trailing)
             buildingLabel.autoPinEdgeToSuperviewEdge(.Leading)
             buildingLabel.autoPinEdgeToSuperviewEdge(.Trailing)
-            locationLabel.autoPinEdgeToSuperviewEdge(.Leading)
-            locationLabel.autoPinEdgeToSuperviewEdge(.Trailing)
             
             startTimeInput.autoPinEdgeToSuperviewMargin(.Leading)
             startTimeInput.autoPinEdgeToSuperviewMargin(.Trailing)
@@ -299,12 +274,10 @@ class SearchView: UIView {
             kinectInput.autoPinEdgeToSuperviewMargin(.Trailing)
             buildingInput.autoPinEdgeToSuperviewMargin(.Leading)
             buildingInput.autoPinEdgeToSuperviewMargin(.Trailing)
-            locationInput.autoPinEdgeToSuperviewMargin(.Leading)
-            locationInput.autoPinEdgeToSuperviewMargin(.Trailing)
             
-            [startTimeLabel, endTimeLabel, roomLabel, floorLabel, kinectLabel, buildingLabel, locationLabel].autoDistributeViewsAlongAxis(.Vertical, alignedTo: .Leading, withFixedSize: 24, insetSpacing: true)
+            [startTimeLabel, endTimeLabel, roomLabel, floorLabel, kinectLabel, buildingLabel].autoDistributeViewsAlongAxis(.Vertical, alignedTo: .Leading, withFixedSize: 24, insetSpacing: true)
             
-            [startTimeInput, endTimeInput, roomInput, floorInput, kinectInput, buildingInput, locationInput].autoDistributeViewsAlongAxis(.Vertical, alignedTo: .Leading, withFixedSize: 24, insetSpacing: true)
+            [startTimeInput, endTimeInput, roomInput, floorInput, kinectInput, buildingInput].autoDistributeViewsAlongAxis(.Vertical, alignedTo: .Leading, withFixedSize: 24, insetSpacing: true)
             
             searchButton.autoAlignAxisToSuperviewAxis(.Vertical)
             searchButton.autoPinEdgeToSuperviewEdge(.Bottom, withInset: 20)
@@ -325,15 +298,17 @@ class SearchView: UIView {
     
     func startTimeChanged(sender: UIDatePicker) {
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = .ShortStyle
-        dateFormatter.timeStyle = .ShortStyle
+//        dateFormatter.dateStyle = .ShortStyle
+//        dateFormatter.timeStyle = .ShortStyle
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss";
         startTimeInput.text = dateFormatter.stringFromDate(sender.date)
     }
     
     func endTimeChanged(sender: UIDatePicker) {
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = .ShortStyle
-        dateFormatter.timeStyle = .ShortStyle
+//        dateFormatter.dateStyle = .ShortStyle
+//        dateFormatter.timeStyle = .ShortStyle
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss";
         endTimeInput.text = dateFormatter.stringFromDate(sender.date)
     }
     
@@ -361,11 +336,6 @@ class SearchView: UIView {
         buildingInput.text = buildingValue
     }
     
-    func locationPickerChanged(notification: NSNotification) {
-        guard let userInfo = notification.userInfo, let locationValue = userInfo["value"] as? String else { return }
-        locationInput.text = locationValue
-    }
-    
     // MARK: - Input Values
     
     func getInputs() -> [String: String] {
@@ -376,7 +346,6 @@ class SearchView: UIView {
         inputValues["floor"] = floorInput.text
         inputValues["kinect"] = kinectInput.text
         inputValues["building"] = buildingInput.text
-        inputValues["location"] = locationInput.text
         return inputValues
     }
 }

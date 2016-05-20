@@ -12,13 +12,16 @@ import AVKit
 import AVFoundation
 import Charts
 import ReactiveCocoa
+import Moya
+
+import enum Result.NoError
+typealias NoError = Result.NoError
 
 class ResultsViewController: UIViewController {
+    var viewModel: ResultsViewModel!
     
     private let cellIdentifier = "TableCell"
-    private let results = ["Result 1", "Result 2", "Result 3", "Result 4", "Result 5", "Result 6"]
-    private let resultSegueIdentifier = "ShowResult"
-    private var selectedResult = ""
+    private var results = [Video]()
     
     private var topView: UIView!
     private var queryLabel: UILabel!
@@ -33,6 +36,7 @@ class ResultsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        bindViewModel()
     }
     
     func setupViews() {
@@ -42,7 +46,6 @@ class ResultsViewController: UIViewController {
         setupDisplayView()
         setupPlayerView()
         setupActivityView()
-        setupControlSignals()
         setupResultsTable()
     }
     
@@ -53,7 +56,6 @@ class ResultsViewController: UIViewController {
     
     func setupQueryLabel() {
         queryLabel = UILabel.newAutoLayoutView()
-        queryLabel.text = "Start: 1:00, End: 2:00, Room: 1, Floor: 1, Kinect: 1, Building: Smith"
         queryLabel.font = UIFont.systemFontOfSize(12)
         queryLabel.numberOfLines = 2
         topView.addSubview(queryLabel)
@@ -71,8 +73,9 @@ class ResultsViewController: UIViewController {
         view.addSubview(displayView)
     }
     
+    // TODO: - Change video player in table view delegate
     func setupPlayerView() {
-        let url = NSBundle.mainBundle().URLForResource("local_video", withExtension: "m4v")
+        let url = NSURL(string: "http://129.105.36.182/webfile/testvideo/20150304_172923.mp4")
         let player = AVPlayer(URL: url!)
         let playerViewController = AVPlayerViewController()
         playerViewController.player = player
@@ -85,24 +88,6 @@ class ResultsViewController: UIViewController {
     
     func setupActivityView() {
         activityView = LineChartView()
-        
-        let days = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"]
-        let walking = [2, 3, 4, 1, 0, 5, 6]
-        
-        var yVals = [ChartDataEntry]()
-        for (index, element) in walking.enumerate() {
-            yVals.append(ChartDataEntry(value: Double(element), xIndex: index))
-        }
-        
-        let chartDataSet = LineChartDataSet(yVals: yVals, label: "Walking")
-        chartDataSet.setColor(UIColor.redColor().colorWithAlphaComponent(0.5))
-        chartDataSet.setCircleColor(UIColor.redColor().colorWithAlphaComponent(0.7))
-        chartDataSet.lineWidth = 2.0
-        chartDataSet.circleRadius = 4.0
-        chartDataSet.drawValuesEnabled = false
-        let chartData = LineChartData(xVals: days, dataSet: chartDataSet)
-        activityView.data = chartData
-        
         activityView.descriptionText = ""
         activityView.xAxis.labelPosition = .Bottom
         activityView.rightAxis.drawLabelsEnabled = false
@@ -111,20 +96,6 @@ class ResultsViewController: UIViewController {
         activityView.leftAxis.valueFormatter = numberFormatter
         activityView.backgroundColor = UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 1.0)
         displayView.addSubview(activityView)
-    }
-    
-    func setupControlSignals() {
-        playerView.hidden = false
-        activityView.hidden = true
-        
-        displayControl
-            .rac_signalForControlEvents(.ValueChanged)
-            .map { sender in sender as! UISegmentedControl }
-            .map { $0.selectedSegmentIndex }
-            .subscribeNext { [unowned self] index in
-                self.playerView.hidden = (index as! Int) != 0
-                self.activityView.hidden = (index as! Int) != 1
-            }
     }
     
     func setupResultsTable() {
@@ -172,12 +143,42 @@ class ResultsViewController: UIViewController {
         
         super.updateViewConstraints()
     }
+    
+    // MARK: - View Model
+    
+    func bindViewModel() {
+        queryLabel.rac_text <~ viewModel.queryText
+        
+        viewModel.segmentIndex <~ displayControl
+            .rac_signalForControlEvents(.ValueChanged)
+            .toSignalProducer()
+            .flatMapError { _ in SignalProducer<AnyObject?, NoError>(value: "Default") }
+            .map { sender in sender as! UISegmentedControl }
+            .map { $0.selectedSegmentIndex }
+        
+        playerView.rac_hidden <~ viewModel.playerViewHidden
+        activityView.rac_hidden <~ viewModel.activityViewHidden
+        
+        viewModel.videos.producer
+            .observeOn(QueueScheduler.mainQueueScheduler)
+            .startWithNext { [unowned self] data in
+                self.results = data
+                self.resultsTable.reloadData()
+            }
+        
+        viewModel.lineChartData.producer
+            .observeOn(QueueScheduler.mainQueueScheduler)
+            .startWithNext { [unowned self] data in
+                self.activityView.data = data
+                self.activityView.notifyDataSetChanged()
+            }
+    }
 }
 
 extension ResultsViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as UITableViewCell
-        cell.textLabel?.text = results[indexPath.row]
+        cell.textLabel?.text = results[indexPath.row].filePath
         return cell
     }
     
@@ -188,7 +189,7 @@ extension ResultsViewController: UITableViewDataSource {
 
 extension ResultsViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        selectedResult = results[indexPath.row]
+//        selectedResult = results[indexPath.row]
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 }

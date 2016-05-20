@@ -38,6 +38,16 @@ class SearchViewController: UIViewController {
         
         super.updateViewConstraints()
     }
+    
+    // MARK: Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == resultsSegueIdentifier {
+            let inputs = searchView.getInputs()
+            let resultsViewController = segue.destinationViewController as! ResultsViewController
+            resultsViewController.viewModel = ResultsViewModel(virtualSitterService: VirtualSitterService(), startTime: inputs["startTime"]!, endTime: inputs["endTime"]!, room: inputs["room"]!, kinect: inputs["kinect"]!, floor: inputs["floor"]!, building: inputs["building"]!)
+        }
+    }
 }
 
 // MARK: - Search View Delegate
