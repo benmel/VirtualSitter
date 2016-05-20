@@ -11,6 +11,12 @@
 		B50076931CD0061D003BF7B4 /* PickerViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50076921CD0061D003BF7B4 /* PickerViewDataSource.swift */; };
 		B50076951CD0062D003BF7B4 /* PickerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50076941CD0062D003BF7B4 /* PickerViewDelegate.swift */; };
 		B50076971CD01871003BF7B4 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50076961CD01871003BF7B4 /* DataStore.swift */; };
+		B52FB0191CEE3E01003E4441 /* VirtualSitterAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52FB0181CEE3E01003E4441 /* VirtualSitterAPI.swift */; };
+		B53BE1C81CED25EE0058FEF0 /* ResultsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BE1C71CED25EE0058FEF0 /* ResultsViewModel.swift */; };
+		B53BE1CB1CED27520058FEF0 /* VirtualSitterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BE1CA1CED27520058FEF0 /* VirtualSitterService.swift */; };
+		B53BE1CE1CED27C20058FEF0 /* UIKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BE1CD1CED27C20058FEF0 /* UIKitExtensions.swift */; };
+		B53BE1D21CEE12450058FEF0 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BE1D11CEE12450058FEF0 /* Video.swift */; };
+		B56A4C4A1CEF6617003CC3A6 /* KinectEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56A4C491CEF6617003CC3A6 /* KinectEvent.swift */; };
 		B581AF8A1CD14354002449E6 /* SearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B581AF891CD14354002449E6 /* SearchTextField.swift */; };
 		B5AFA64F1CC0883100B358A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA64E1CC0883100B358A2 /* AppDelegate.swift */; };
 		B5AFA6511CC0883100B358A2 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA6501CC0883100B358A2 /* SearchViewController.swift */; };
@@ -47,6 +53,12 @@
 		B50076921CD0061D003BF7B4 /* PickerViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerViewDataSource.swift; sourceTree = "<group>"; };
 		B50076941CD0062D003BF7B4 /* PickerViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerViewDelegate.swift; sourceTree = "<group>"; };
 		B50076961CD01871003BF7B4 /* DataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
+		B52FB0181CEE3E01003E4441 /* VirtualSitterAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualSitterAPI.swift; sourceTree = "<group>"; };
+		B53BE1C71CED25EE0058FEF0 /* ResultsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsViewModel.swift; sourceTree = "<group>"; };
+		B53BE1CA1CED27520058FEF0 /* VirtualSitterService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualSitterService.swift; sourceTree = "<group>"; };
+		B53BE1CD1CED27C20058FEF0 /* UIKitExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIKitExtensions.swift; sourceTree = "<group>"; };
+		B53BE1D11CEE12450058FEF0 /* Video.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
+		B56A4C491CEF6617003CC3A6 /* KinectEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KinectEvent.swift; sourceTree = "<group>"; };
 		B581AF891CD14354002449E6 /* SearchTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTextField.swift; sourceTree = "<group>"; };
 		B5AFA64B1CC0883100B358A2 /* VirtualSitter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualSitter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5AFA64E1CC0883100B358A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -120,6 +132,33 @@
 			name = Videos;
 			sourceTree = "<group>";
 		};
+		B53BE1C61CED25D70058FEF0 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				B53BE1C71CED25EE0058FEF0 /* ResultsViewModel.swift */,
+			);
+			name = ViewModels;
+			sourceTree = "<group>";
+		};
+		B53BE1C91CED273C0058FEF0 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				B53BE1CA1CED27520058FEF0 /* VirtualSitterService.swift */,
+				B52FB0181CEE3E01003E4441 /* VirtualSitterAPI.swift */,
+				B53BE1D11CEE12450058FEF0 /* Video.swift */,
+				B56A4C491CEF6617003CC3A6 /* KinectEvent.swift */,
+			);
+			name = Service;
+			sourceTree = "<group>";
+		};
+		B53BE1CC1CED27A50058FEF0 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				B53BE1CD1CED27C20058FEF0 /* UIKitExtensions.swift */,
+			);
+			name = Util;
+			sourceTree = "<group>";
+		};
 		B58CD8771CDD74BB00671B28 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -156,6 +195,9 @@
 				B58CD8771CDD74BB00671B28 /* Models */,
 				B5DDF5821CCFB3180005A3FF /* Controllers */,
 				B5DDF5831CCFB31F0005A3FF /* Views */,
+				B53BE1C61CED25D70058FEF0 /* ViewModels */,
+				B53BE1C91CED273C0058FEF0 /* Service */,
+				B53BE1CC1CED27A50058FEF0 /* Util */,
 				B5DDF5841CCFB3260005A3FF /* Application */,
 				B51082201CE3B45F0022AB2D /* Videos */,
 				B5AFA6581CC0883100B358A2 /* Assets.xcassets */,
@@ -397,11 +439,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B52FB0191CEE3E01003E4441 /* VirtualSitterAPI.swift in Sources */,
 				B50076971CD01871003BF7B4 /* DataStore.swift in Sources */,
+				B53BE1C81CED25EE0058FEF0 /* ResultsViewModel.swift in Sources */,
+				B53BE1CE1CED27C20058FEF0 /* UIKitExtensions.swift in Sources */,
 				B581AF8A1CD14354002449E6 /* SearchTextField.swift in Sources */,
 				B5F0690C1CC7D9C900ACE75D /* SearchView.swift in Sources */,
+				B53BE1D21CEE12450058FEF0 /* Video.swift in Sources */,
+				B53BE1CB1CED27520058FEF0 /* VirtualSitterService.swift in Sources */,
 				B50076931CD0061D003BF7B4 /* PickerViewDataSource.swift in Sources */,
 				B5AFA6511CC0883100B358A2 /* SearchViewController.swift in Sources */,
+				B56A4C4A1CEF6617003CC3A6 /* KinectEvent.swift in Sources */,
 				B5AFA64F1CC0883100B358A2 /* AppDelegate.swift in Sources */,
 				B5DED1DE1CC96FC700266F8E /* ResultsViewController.swift in Sources */,
 				B5AFA6571CC0883100B358A2 /* VirtualSitter.xcdatamodeld in Sources */,

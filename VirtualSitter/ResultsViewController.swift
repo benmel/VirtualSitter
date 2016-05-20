@@ -12,20 +12,16 @@ import AVKit
 import AVFoundation
 import Charts
 import ReactiveCocoa
+import Moya
+
+import enum Result.NoError
+public typealias NoError = Result.NoError
 
 class ResultsViewController: UIViewController {
-    
-    var startTime: String!
-    var endTime: String!
-    var room: String!
-    var floor: String!
-    var kinect: String!
-    var building: String!
+    var viewModel: ResultsViewModel!
     
     private let cellIdentifier = "TableCell"
-    private var results = [String]()
-    private var selectedResult = ""
-    private var events = [NSDictionary]()
+    private var results = [Video]()
     
     private var topView: UIView!
     private var queryLabel: UILabel!
@@ -40,19 +36,16 @@ class ResultsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        bindViewModel()
     }
     
     func setupViews() {
-        getVideos()
-        getEvents()
-        
         setupTopView()
         setupQueryLabel()
         setupDisplayControl()
         setupDisplayView()
         setupPlayerView()
         setupActivityView()
-        setupControlSignals()
         setupResultsTable()
     }
     
@@ -63,7 +56,6 @@ class ResultsViewController: UIViewController {
     
     func setupQueryLabel() {
         queryLabel = UILabel.newAutoLayoutView()
-        queryLabel.text = "Start: \(startTime), End: \(endTime), Room: \(room), Floor: \(floor), Kinect: \(kinect), Building: \(building)"
         queryLabel.font = UIFont.systemFontOfSize(12)
         queryLabel.numberOfLines = 2
         topView.addSubview(queryLabel)
@@ -96,51 +88,6 @@ class ResultsViewController: UIViewController {
     
     func setupActivityView() {
         activityView = LineChartView()
-        
-        var days = [NSDate]()
-        var fall = [Int]()
-        
-        let inputDateFormatter = NSDateFormatter()
-        inputDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        
-        let outputDateFormatter = NSDateFormatter()
-        outputDateFormatter.dateFormat = "MM-dd"
-        
-        let calendar = NSCalendar.currentCalendar()
-        
-        for event in events {
-            let date = inputDateFormatter.dateFromString(event["startTime"] as! String)
-            if let lastDay = days.last {
-                if calendar.compareDate(date!, toDate: lastDay, toUnitGranularity: .Day) == .OrderedSame {
-                    fall[fall.count-1] += 1
-                } else {
-                    days.append(date!)
-                    fall.append(1)
-                }
-            } else {
-                days.append(date!)
-                fall.append(1)
-            }
-        }
-        
-        var yVals = [ChartDataEntry]()
-        for (index, element) in fall.enumerate() {
-            yVals.append(ChartDataEntry(value: Double(element), xIndex: index))
-        }
-        
-        let xVals = days.map { day in
-            outputDateFormatter.stringFromDate(day)
-        }
-        
-        let chartDataSet = LineChartDataSet(yVals: yVals, label: "Fall")
-        chartDataSet.setColor(UIColor.redColor().colorWithAlphaComponent(0.5))
-        chartDataSet.setCircleColor(UIColor.redColor().colorWithAlphaComponent(0.7))
-        chartDataSet.lineWidth = 2.0
-        chartDataSet.circleRadius = 4.0
-        chartDataSet.drawValuesEnabled = false
-        let chartData = LineChartData(xVals: xVals, dataSet: chartDataSet)
-        activityView.data = chartData
-        
         activityView.descriptionText = ""
         activityView.xAxis.labelPosition = .Bottom
         activityView.rightAxis.drawLabelsEnabled = false
@@ -151,98 +98,12 @@ class ResultsViewController: UIViewController {
         displayView.addSubview(activityView)
     }
     
-    func setupControlSignals() {
-        playerView.hidden = false
-        activityView.hidden = true
-        
-        displayControl
-            .rac_signalForControlEvents(.ValueChanged)
-            .map { sender in sender as! UISegmentedControl }
-            .map { $0.selectedSegmentIndex }
-            .subscribeNext { [unowned self] index in
-                self.playerView.hidden = (index as! Int) != 0
-                self.activityView.hidden = (index as! Int) != 1
-            }
-    }
-    
     func setupResultsTable() {
         resultsTable = UITableView.newAutoLayoutView()
         resultsTable.dataSource = self
         resultsTable.delegate = self
         resultsTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         view.addSubview(resultsTable)
-    }
-    
-    func getVideos() {
-        let session = NSURLSession.sharedSession()
-        let url = "http://129.105.36.182/firstqueryVideo.php?"
-        let parameters = "from=\(startTime)&to=\(endTime)&room=\(room)&kinect=\(kinect)".stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLPathAllowedCharacterSet())
-        let request = NSURLRequest(URL: NSURL(string: url + parameters!)!)
-        
-        // need to update table after receiving data
-        let producer = session.rac_dataWithRequest(request)
-        producer
-            .on(failed: {e in print("Failure")})
-            .retry(5)
-            .start { [unowned self] event in
-                switch event {
-                case let .Next(next):
-                    do {
-                        let JSON = try NSJSONSerialization.JSONObjectWithData(next.0, options: .MutableContainers)
-                        guard let JSONArray = JSON as? [NSDictionary] else {
-                            print("Not an array")
-                            return
-                        }
-                        for r in JSONArray {
-                            let file = r["FilePath"] as! String
-                            self.results.append(file)
-                        }
-                    }
-                    catch let JSONError as NSError {
-                        print("\(JSONError)")
-                    }
-                case let .Failed(error):
-                    print("Failed: \(error)")
-                case .Completed:
-                    print("Completed")
-                case .Interrupted:
-                    print("Interrupted")
-                }
-            }
-    }
-    
-    func getEvents() {
-        let session = NSURLSession.sharedSession()
-        let url = "http://129.105.36.182/mobile/event_query.php?"
-        let parameters = "start=\(startTime)&end=\(endTime)&room=\(room)&kinectId=\(kinect)&event=fall".stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLPathAllowedCharacterSet())
-        let request = NSURLRequest(URL: NSURL(string: url + parameters!)!)
-        
-        let producer = session.rac_dataWithRequest(request)
-        producer
-            .on(failed: {e in print("Failure")})
-            .retry(5)
-            .start { [unowned self] event in
-                switch event {
-                case let .Next(next):
-                    do {
-                        let JSON = try NSJSONSerialization.JSONObjectWithData(next.0, options: .MutableContainers)
-                        guard let JSONArray = JSON as? [NSDictionary] else {
-                            print("Not an array")
-                            return
-                        }
-                        self.events = JSONArray
-                    }
-                    catch let JSONError as NSError {
-                        print("\(JSONError)")
-                    }
-                case let .Failed(error):
-                    print("Failed: \(error)")
-                case .Completed:
-                    print("Completed Events")
-                case .Interrupted:
-                    print("Interrupted")
-                }
-        }
     }
     
     // MARK: - Layout
@@ -282,12 +143,42 @@ class ResultsViewController: UIViewController {
         
         super.updateViewConstraints()
     }
+    
+    // MARK: - View Model
+    
+    func bindViewModel() {
+        queryLabel.rac_text <~ viewModel.queryText
+        
+        viewModel.segmentIndex <~ displayControl
+            .rac_signalForControlEvents(.ValueChanged)
+            .toSignalProducer()
+            .flatMapError { _ in SignalProducer<AnyObject?, NoError>(value: "Default") }
+            .map { sender in sender as! UISegmentedControl }
+            .map { $0.selectedSegmentIndex }
+        
+        playerView.rac_hidden <~ viewModel.playerViewHidden
+        activityView.rac_hidden <~ viewModel.activityViewHidden
+        
+        viewModel.videos.producer
+            .observeOn(QueueScheduler.mainQueueScheduler)
+            .startWithNext { [unowned self] data in
+                self.results = data
+                self.resultsTable.reloadData()
+            }
+        
+        viewModel.lineChartData.producer
+            .observeOn(QueueScheduler.mainQueueScheduler)
+            .startWithNext { [unowned self] data in
+                self.activityView.data = data
+                self.activityView.notifyDataSetChanged()
+            }
+    }
 }
 
 extension ResultsViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as UITableViewCell
-        cell.textLabel?.text = results[indexPath.row]
+        cell.textLabel?.text = results[indexPath.row].filePath
         return cell
     }
     
@@ -298,7 +189,7 @@ extension ResultsViewController: UITableViewDataSource {
 
 extension ResultsViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        selectedResult = results[indexPath.row]
+//        selectedResult = results[indexPath.row]
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 }

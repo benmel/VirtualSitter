@@ -43,14 +43,9 @@ class SearchViewController: UIViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == resultsSegueIdentifier {
-            let resultsViewController = segue.destinationViewController as! ResultsViewController
             let inputs = searchView.getInputs()
-            resultsViewController.startTime = inputs["startTime"]
-            resultsViewController.endTime = inputs["endTime"]
-            resultsViewController.room = inputs["room"]
-            resultsViewController.floor = inputs["floor"]
-            resultsViewController.kinect = inputs["kinect"]
-            resultsViewController.building = inputs["building"]
+            let resultsViewController = segue.destinationViewController as! ResultsViewController
+            resultsViewController.viewModel = ResultsViewModel(virtualSitterService: VirtualSitterService(), startTime: inputs["startTime"]!, endTime: inputs["endTime"]!, room: inputs["room"]!, kinect: inputs["kinect"]!, floor: inputs["floor"]!, building: inputs["building"]!)
         }
     }
 }
