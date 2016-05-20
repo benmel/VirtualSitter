@@ -15,7 +15,7 @@ import ReactiveCocoa
 import Moya
 
 import enum Result.NoError
-public typealias NoError = Result.NoError
+typealias NoError = Result.NoError
 
 class ResultsViewController: UIViewController {
     var viewModel: ResultsViewModel!
@@ -73,8 +73,8 @@ class ResultsViewController: UIViewController {
         view.addSubview(displayView)
     }
     
+    // TODO: - Change video player in table view delegate
     func setupPlayerView() {
-//        let url = NSBundle.mainBundle().URLForResource("local_video", withExtension: "m4v")
         let url = NSURL(string: "http://129.105.36.182/webfile/testvideo/20150304_172923.mp4")
         let player = AVPlayer(URL: url!)
         let playerViewController = AVPlayerViewController()
