@@ -24,12 +24,20 @@ class ResultsViewController: UIViewController {
     private var results = [Video]()
     
     private var topView: UIView!
+    private var bottomView: UIView!
     private var queryLabel: UILabel!
     private var displayControl: UISegmentedControl!
     private var displayView: UIView!
     private var playerView: UIView!
     private var activityView: LineChartView!
     private var resultsTable: UITableView!
+    private var sliderView: UIView!
+    private var startTimeSlider: UISlider!
+    private var sliderLabel: UILabel!
+    private var minSliderLabel: UILabel!
+    private var maxSliderLabel: UILabel!
+    
+    private let sliderSpacing: CGFloat = 40
     
     private var didSetupConstraints = false
     
@@ -41,17 +49,26 @@ class ResultsViewController: UIViewController {
     
     func setupViews() {
         setupTopView()
+        setupBottomView()
         setupQueryLabel()
         setupDisplayControl()
         setupDisplayView()
         setupPlayerView()
         setupActivityView()
         setupResultsTable()
+        setupSliderView()
+        setupStartTimeSlider()
+        setupSliderLabels()
     }
     
     func setupTopView() {
         topView = UIView.newAutoLayoutView()
         view.addSubview(topView)
+    }
+    
+    func setupBottomView() {
+        bottomView = UIView.newAutoLayoutView()
+        view.addSubview(bottomView)
     }
     
     func setupQueryLabel() {
@@ -77,6 +94,7 @@ class ResultsViewController: UIViewController {
     func setupPlayerView() {
         let url = NSURL(string: "http://129.105.36.182/webfile/testvideo/20150304_172923.mp4")
         let player = AVPlayer(URL: url!)
+//        let player = AVPlayer()
         let playerViewController = AVPlayerViewController()
         playerViewController.player = player
         playerView = playerViewController.view
@@ -103,7 +121,33 @@ class ResultsViewController: UIViewController {
         resultsTable.dataSource = self
         resultsTable.delegate = self
         resultsTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        view.addSubview(resultsTable)
+        bottomView.addSubview(resultsTable)
+    }
+    
+    func setupSliderView() {
+        sliderView = UIView.newAutoLayoutView()
+        bottomView.addSubview(sliderView)
+    }
+    
+    func setupStartTimeSlider() {
+        startTimeSlider = UISlider.newAutoLayoutView()
+        startTimeSlider.continuous = false
+        sliderView.addSubview(startTimeSlider)
+    }
+    
+    func setupSliderLabels() {
+        sliderLabel = UILabel.newAutoLayoutView()
+        sliderLabel.font = UIFont.systemFontOfSize(14)
+        sliderLabel.text = "Select a start date"
+        sliderView.addSubview(sliderLabel)
+        
+        minSliderLabel = UILabel.newAutoLayoutView()
+        minSliderLabel.font = UIFont.systemFontOfSize(12)
+        sliderView.addSubview(minSliderLabel)
+        
+        maxSliderLabel = UILabel.newAutoLayoutView()
+        maxSliderLabel.font = UIFont.systemFontOfSize(12)
+        sliderView.addSubview(maxSliderLabel)
     }
     
     // MARK: - Layout
@@ -132,11 +176,26 @@ class ResultsViewController: UIViewController {
             playerView.autoPinEdgesToSuperviewEdges()
             activityView.autoPinEdgesToSuperviewEdges()
             
-            resultsTable.autoPinEdgeToSuperviewEdge(.Bottom)
-            resultsTable.autoPinEdgeToSuperviewEdge(.Leading)
-            resultsTable.autoPinEdgeToSuperviewEdge(.Trailing)
-            resultsTable.autoPinEdge(.Top, toEdge: .Bottom, ofView: displayView)
-            resultsTable.autoMatchDimension(.Height, toDimension: .Height, ofView: displayView)
+            bottomView.autoPinEdgeToSuperviewEdge(.Bottom)
+            bottomView.autoPinEdgeToSuperviewEdge(.Leading)
+            bottomView.autoPinEdgeToSuperviewEdge(.Trailing)
+            bottomView.autoPinEdge(.Top, toEdge: .Bottom, ofView: displayView)
+            bottomView.autoMatchDimension(.Height, toDimension: .Height, ofView: displayView)
+            
+            resultsTable.autoPinEdgesToSuperviewEdges()
+            sliderView.autoPinEdgesToSuperviewEdges()
+            
+            sliderLabel.autoPinEdgeToSuperviewEdge(.Leading, withInset: sliderSpacing)
+            sliderLabel.autoPinEdgeToSuperviewEdge(.Top, withInset: 10)
+            
+            startTimeSlider.autoPinEdge(.Top, toEdge: .Bottom, ofView: sliderLabel)
+            startTimeSlider.autoPinEdgeToSuperviewEdge(.Leading, withInset: sliderSpacing)
+            startTimeSlider.autoPinEdgeToSuperviewEdge(.Trailing, withInset: sliderSpacing)
+            
+            minSliderLabel.autoPinEdgeToSuperviewEdge(.Leading, withInset: sliderSpacing)
+            minSliderLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: startTimeSlider)
+            maxSliderLabel.autoPinEdgeToSuperviewEdge(.Trailing, withInset: sliderSpacing)
+            maxSliderLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: startTimeSlider)
             
             didSetupConstraints = true
         }
@@ -152,12 +211,24 @@ class ResultsViewController: UIViewController {
         viewModel.segmentIndex <~ displayControl
             .rac_signalForControlEvents(.ValueChanged)
             .toSignalProducer()
-            .flatMapError { _ in SignalProducer<AnyObject?, NoError>(value: "Default") }
+            .flatMapError { _ in SignalProducer<AnyObject?, NoError>(value: "Segment Error") }
             .map { sender in sender as! UISegmentedControl }
             .map { $0.selectedSegmentIndex }
         
         playerView.rac_hidden <~ viewModel.playerViewHidden
+        resultsTable.rac_hidden <~ viewModel.playerViewHidden
         activityView.rac_hidden <~ viewModel.activityViewHidden
+        sliderView.rac_hidden <~ viewModel.activityViewHidden
+        
+        minSliderLabel.rac_text <~ viewModel.displayStartTime
+        maxSliderLabel.rac_text <~ viewModel.displayEndTime
+        
+        viewModel.sliderValue <~ startTimeSlider
+            .rac_signalForControlEvents(.ValueChanged)
+            .toSignalProducer()
+            .flatMapError { _ in SignalProducer<AnyObject?, NoError>(value: "Slider Error") }
+            .map { sender in sender as! UISlider }
+            .map { $0.value }
         
         viewModel.videos.producer
             .observeOn(QueueScheduler.mainQueueScheduler)
