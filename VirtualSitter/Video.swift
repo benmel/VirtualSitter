@@ -6,7 +6,7 @@
 //  Copyright © 2016 Ben Meline. All rights reserved.
 //
 
-import Foundation
+import SwiftyJSON
 
 struct Video {
     let startTime: String
@@ -15,11 +15,11 @@ struct Video {
     let kinect: String
     let filePath: String
     
-    init(json: NSDictionary) {
-        startTime = json["Start"] as! String
-        endTime = json["end"] as! String
-        room = json["RoomID"] as! String
-        kinect = json["KinectID"] as! String
-        filePath = json["FilePath"] as! String
+    init(json: JSON) {
+        startTime = json["Start"].stringValue
+        endTime = json["end"].stringValue
+        room = json["RoomID"].stringValue
+        kinect = json["KinectID"].stringValue
+        filePath = json["FilePath"].stringValue
     }
 }

@@ -36,6 +36,8 @@ class ResultsViewController: UIViewController {
     private var sliderLabel: UILabel!
     private var minSliderLabel: UILabel!
     private var maxSliderLabel: UILabel!
+    private var timeScaleLabel: UILabel!
+    private var timeScaleControl: UISegmentedControl!
     
     private let sliderSpacing: CGFloat = 40
     
@@ -59,6 +61,7 @@ class ResultsViewController: UIViewController {
         setupSliderView()
         setupStartTimeSlider()
         setupSliderLabels()
+        setupTimeScaleControl()
     }
     
     func setupTopView() {
@@ -148,6 +151,18 @@ class ResultsViewController: UIViewController {
         maxSliderLabel = UILabel.newAutoLayoutView()
         maxSliderLabel.font = UIFont.systemFontOfSize(12)
         sliderView.addSubview(maxSliderLabel)
+        
+        timeScaleLabel = UILabel.newAutoLayoutView()
+        timeScaleLabel.font = UIFont.systemFontOfSize(14)
+        timeScaleLabel.text = "Select a time scale"
+        sliderView.addSubview(timeScaleLabel)
+    }
+    
+    func setupTimeScaleControl() {
+        timeScaleControl = UISegmentedControl(items: ["All", "Week", "Month", "Year"])
+        timeScaleControl.translatesAutoresizingMaskIntoConstraints = false
+        timeScaleControl.selectedSegmentIndex = 0
+        sliderView.addSubview(timeScaleControl)
     }
     
     // MARK: - Layout
@@ -197,6 +212,14 @@ class ResultsViewController: UIViewController {
             maxSliderLabel.autoPinEdgeToSuperviewEdge(.Trailing, withInset: sliderSpacing)
             maxSliderLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: startTimeSlider)
             
+            timeScaleLabel.autoPinEdgeToSuperviewEdge(.Leading, withInset: sliderSpacing)
+            timeScaleLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: minSliderLabel, withOffset: 20)
+            
+            timeScaleControl.autoPinEdge(.Top, toEdge: .Bottom, ofView: timeScaleLabel, withOffset: 10)
+            timeScaleControl.autoAlignAxisToSuperviewAxis(.Vertical)
+            timeScaleControl.autoMatchDimension(.Width, toDimension: .Width, ofView: startTimeSlider)
+            timeScaleControl.autoSetDimension(.Height, toSize: 30)
+            
             didSetupConstraints = true
         }
         
@@ -208,40 +231,47 @@ class ResultsViewController: UIViewController {
     func bindViewModel() {
         queryLabel.rac_text <~ viewModel.queryText
         
-        viewModel.segmentIndex <~ displayControl
-            .rac_signalForControlEvents(.ValueChanged)
-            .toSignalProducer()
-            .flatMapError { _ in SignalProducer<AnyObject?, NoError>(value: "Segment Error") }
-            .map { sender in sender as! UISegmentedControl }
-            .map { $0.selectedSegmentIndex }
-        
         playerView.rac_hidden <~ viewModel.playerViewHidden
         resultsTable.rac_hidden <~ viewModel.playerViewHidden
         activityView.rac_hidden <~ viewModel.activityViewHidden
         sliderView.rac_hidden <~ viewModel.activityViewHidden
         
-        minSliderLabel.rac_text <~ viewModel.displayStartTime
-        maxSliderLabel.rac_text <~ viewModel.displayEndTime
+        minSliderLabel.rac_text <~ viewModel.displayStartDate
+        maxSliderLabel.rac_text <~ viewModel.displayEndDate
         
-        viewModel.sliderValue <~ startTimeSlider
+        viewModel.displaySegmentIndex <~ displayControl
+            .rac_signalForControlEvents(.ValueChanged)
+            .toSignalProducer()
+            .flatMapError { _ in SignalProducer<AnyObject?, NoError>(value: "Display Segment Error") }
+            .map { sender in sender as! UISegmentedControl }
+            .map { $0.selectedSegmentIndex }
+        
+        viewModel.startTimeSliderValue <~ startTimeSlider
             .rac_signalForControlEvents(.ValueChanged)
             .toSignalProducer()
             .flatMapError { _ in SignalProducer<AnyObject?, NoError>(value: "Slider Error") }
             .map { sender in sender as! UISlider }
             .map { $0.value }
         
+        viewModel.timeScaleIndex <~ timeScaleControl
+            .rac_signalForControlEvents(.ValueChanged)
+            .toSignalProducer()
+            .flatMapError { _ in SignalProducer<AnyObject?, NoError>(value: "Time Scale Segment Error") }
+            .map { sender in sender as! UISegmentedControl }
+            .map { $0.selectedSegmentIndex }
+        
         viewModel.videos.producer
-            .observeOn(QueueScheduler.mainQueueScheduler)
-            .startWithNext { [unowned self] data in
-                self.results = data
-                self.resultsTable.reloadData()
+            .observeOn(UIScheduler())
+            .startWithNext { [weak self] data in
+                self?.results = data
+                self?.resultsTable.reloadData()
             }
         
         viewModel.lineChartData.producer
-            .observeOn(QueueScheduler.mainQueueScheduler)
-            .startWithNext { [unowned self] data in
-                self.activityView.data = data
-                self.activityView.notifyDataSetChanged()
+            .observeOn(UIScheduler())
+            .startWithNext { [weak self] data in
+                self?.activityView.data = data
+                self?.activityView.notifyDataSetChanged()
             }
     }
 }

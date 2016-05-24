@@ -6,16 +6,16 @@
 //  Copyright © 2016 Ben Meline. All rights reserved.
 //
 
-import Foundation
+import SwiftyJSON
 
 struct KinectEvent {
     let startTime: String
     let endTime: String
     let event: String
     
-    init(json: NSDictionary) {
-        startTime = json["startTime"] as! String
-        endTime = json["endTime"] as! String
-        event = json["event"] as! String
+    init(json: JSON) {
+        startTime = json["startTime"].stringValue
+        endTime = json["endTime"].stringValue
+        event = json["event"].stringValue
     }
 }

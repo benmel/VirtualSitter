@@ -16,14 +16,4 @@ struct EventData {
     let sit: [Int]
     let sleep: [Int]
     let watch: [Int]
-    
-    init(days: [NSDate], eat: [Int], fall: [Int], none: [Int], sit: [Int], sleep: [Int], watch: [Int]) {
-        self.days = days
-        self.eat = eat
-        self.fall = fall
-        self.none = none
-        self.sit = sit
-        self.sleep = sleep
-        self.watch = watch
-    }
 }
