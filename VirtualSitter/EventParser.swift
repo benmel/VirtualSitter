@@ -55,7 +55,7 @@ class EventParser {
         for event in events {
             let longDate = longDateFormatter.dateFromString(event.startTime)
             let components = calendar.components([.Month, .Day, .Year], fromDate: longDate!)
-            let date = (calendar.dateFromComponents(components))!
+            let date = calendar.dateFromComponents(components)!
             var values = eventsDict[date]
             if values != nil {
                 values!.append(event)

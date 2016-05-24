@@ -28,23 +28,13 @@ class ResultsViewModel {
     private let eventData = MutableProperty<EventData?>(nil)
     let lineChartData = MutableProperty<LineChartData?>(nil)
     
-    private static let longDateFormatter: NSDateFormatter = {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        return dateFormatter
-    }()
-    private static let shortDateFormatter: NSDateFormatter = {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        return dateFormatter
-    }()
-    private static let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
-    
-    init(virtualSitterService: VirtualSitterService, startTime: String, endTime: String, room: String, kinect: String, floor: String, building: String) {
-        func getDateString(date: String) -> String {
-            guard let inputDate = ResultsViewModel.longDateFormatter.dateFromString(date) else { return date }
-            return ResultsViewModel.shortDateFormatter.stringFromDate(inputDate)
-        }
+    init(virtualSitterService: VirtualSitterService, startTime: NSDate, endTime: NSDate, room: String, kinect: String, floor: String, building: String) {
+        
+        let shortDateFormatter = NSDateFormatter()
+        shortDateFormatter.dateFormat = "yyyy-MM-dd"
+        let longDateFormatter = NSDateFormatter()
+        longDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
         
         func getStartDate(sliderValue: Float, days: [NSDate], queryStartDate: NSDate) -> NSDate {
             if days.count == 0 {
@@ -58,24 +48,22 @@ class ResultsViewModel {
         func getEndDate(scaleIndex: Int, currentStartDate: NSDate, queryEndDate: NSDate) -> NSDate {
             switch scaleIndex {
             case 1:
-                return ResultsViewModel.calendar.dateByAddingUnit(.Day, value: 7, toDate: currentStartDate, options: NSCalendarOptions(rawValue: 0))!
+                return calendar.dateByAddingUnit(.Day, value: 7, toDate: currentStartDate, options: NSCalendarOptions(rawValue: 0))!
             case 2:
-                return ResultsViewModel.calendar.dateByAddingUnit(.Month, value: 1, toDate: currentStartDate, options: NSCalendarOptions(rawValue: 0))!
+                return calendar.dateByAddingUnit(.Month, value: 1, toDate: currentStartDate, options: NSCalendarOptions(rawValue: 0))!
             case 3:
-                return ResultsViewModel.calendar.dateByAddingUnit(.Year, value: 1, toDate: currentStartDate, options: NSCalendarOptions(rawValue: 0))!
+                return calendar.dateByAddingUnit(.Year, value: 1, toDate: currentStartDate, options: NSCalendarOptions(rawValue: 0))!
             default:
                 return queryEndDate
             }
         }
         
-        let startDate = ResultsViewModel.longDateFormatter.dateFromString(startTime)!
-        let endDate = ResultsViewModel.longDateFormatter.dateFromString(endTime)!
-        let days = EventParser.datesBetween(startDate, endTime: endDate)
+        let days = EventParser.datesBetween(startTime, endTime: endTime)
         
         self.virtualSitterService = virtualSitterService
-        queryText = ConstantProperty("Start: \(startTime), End: \(endTime), Room: \(room), Floor: \(floor), Kinect: \(kinect), Building: \(building)")
-        displayStartDate = ConstantProperty(getDateString(startTime))
-        displayEndDate = ConstantProperty(getDateString(endTime))
+        displayStartDate = ConstantProperty(shortDateFormatter.stringFromDate(startTime))
+        displayEndDate = ConstantProperty(shortDateFormatter.stringFromDate(endTime))
+        queryText = ConstantProperty("Start: \(longDateFormatter.stringFromDate(startTime)), End: \(longDateFormatter.stringFromDate(endTime)), Room: \(room), Floor: \(floor), Kinect: \(kinect), Building: \(building)")
         
         displaySegmentIndex.producer.startWithSignal { signal,_ in
             playerViewHidden <~ signal.map { $0 != 0 }
@@ -90,24 +78,15 @@ class ResultsViewModel {
         eventData <~ self.virtualSitterService.signalForEventSearch(startTime, endTime: endTime, room: room, kinect: kinect)
             .observeOn(QueueScheduler())
             .retry(5)
-            .map { events in
-                let startDate = ResultsViewModel.longDateFormatter.dateFromString(startTime)!
-                let endDate = ResultsViewModel.longDateFormatter.dateFromString(endTime)!
-                return EventParser.parse(events, startTime: startDate, endTime: endDate)
-            }
+            .map { EventParser.parse($0, startTime: startTime, endTime: endTime) }
             .flatMapError { _ in return SignalProducer<EventData?, NoError>.empty }
         
         lineChartData <~ combineLatest(startTimeSliderValue.producer, timeScaleIndex.producer, eventData.producer)
             .observeOn(QueueScheduler())
             .map { sliderValue, scaleIndex, eventData in
                 if eventData == nil { return nil }
-                
-                let queryStartDate = ResultsViewModel.longDateFormatter.dateFromString(startTime)!
-                let queryEndDate = ResultsViewModel.longDateFormatter.dateFromString(endTime)!
-                
-                let startDate = getStartDate(sliderValue, days: days, queryStartDate: queryStartDate)
-                let endDate = getEndDate(scaleIndex, currentStartDate: startDate, queryEndDate: queryEndDate)
-
+                let startDate = getStartDate(sliderValue, days: days, queryStartDate: startTime)
+                let endDate = getEndDate(scaleIndex, currentStartDate: startDate, queryEndDate: endTime)
                 return EventParser.getLineChartData(eventData!, startTime: startDate, endTime: endDate)
             }
     }

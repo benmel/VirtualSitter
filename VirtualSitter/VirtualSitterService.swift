@@ -15,7 +15,7 @@ class VirtualSitterService {
     private let provider = ReactiveCocoaMoyaProvider<VirtualSitter>()
     private let events = "eat,fall,none,sit,sleep,watch"
     
-    func signalForVideoSearch(startTime: String, endTime: String, room: String, kinect: String) -> SignalProducer<[Video], Error> {
+    func signalForVideoSearch(startTime: NSDate, endTime: NSDate, room: String, kinect: String) -> SignalProducer<[Video], Error> {
         return provider.request(.Videos(startTime: startTime, endTime: endTime, room: room, kinect: kinect))
             .observeOn(QueueScheduler())
             .filterSuccessfulStatusCodes()
@@ -25,7 +25,7 @@ class VirtualSitterService {
             }
     }
     
-    func signalForEventSearch(startTime: String, endTime: String, room: String, kinect: String) -> SignalProducer<[KinectEvent], Error> {
+    func signalForEventSearch(startTime: NSDate, endTime: NSDate, room: String, kinect: String) -> SignalProducer<[KinectEvent], Error> {
         return provider.request(.Events(startTime: startTime, endTime: endTime, room: room, kinect: kinect, event: events))
             .observeOn(QueueScheduler())
             .filterSuccessfulStatusCodes()
