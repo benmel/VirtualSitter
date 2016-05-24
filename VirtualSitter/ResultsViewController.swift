@@ -24,12 +24,23 @@ class ResultsViewController: UIViewController {
     private var results = [Video]()
     
     private var topView: UIView!
+    private var bottomView: UIView!
     private var queryLabel: UILabel!
     private var displayControl: UISegmentedControl!
     private var displayView: UIView!
     private var playerView: UIView!
     private var activityView: LineChartView!
     private var resultsTable: UITableView!
+    private var timeScrollView: UIScrollView!
+    private var timeContentView: UIView!
+    private var startTimeSlider: UISlider!
+    private var sliderLabel: UILabel!
+    private var minSliderLabel: UILabel!
+    private var maxSliderLabel: UILabel!
+    private var timeScaleLabel: UILabel!
+    private var timeScaleControl: UISegmentedControl!
+    
+    private let sliderSpacing: CGFloat = 40
     
     private var didSetupConstraints = false
     
@@ -41,17 +52,27 @@ class ResultsViewController: UIViewController {
     
     func setupViews() {
         setupTopView()
+        setupBottomView()
         setupQueryLabel()
         setupDisplayControl()
         setupDisplayView()
         setupPlayerView()
         setupActivityView()
         setupResultsTable()
+        setupTimeView()
+        setupStartTimeSlider()
+        setupSliderLabels()
+        setupTimeScaleControl()
     }
     
     func setupTopView() {
         topView = UIView.newAutoLayoutView()
         view.addSubview(topView)
+    }
+    
+    func setupBottomView() {
+        bottomView = UIView.newAutoLayoutView()
+        view.addSubview(bottomView)
     }
     
     func setupQueryLabel() {
@@ -77,6 +98,7 @@ class ResultsViewController: UIViewController {
     func setupPlayerView() {
         let url = NSURL(string: "http://129.105.36.182/webfile/testvideo/20150304_172923.mp4")
         let player = AVPlayer(URL: url!)
+//        let player = AVPlayer()
         let playerViewController = AVPlayerViewController()
         playerViewController.player = player
         playerView = playerViewController.view
@@ -103,7 +125,47 @@ class ResultsViewController: UIViewController {
         resultsTable.dataSource = self
         resultsTable.delegate = self
         resultsTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        view.addSubview(resultsTable)
+        bottomView.addSubview(resultsTable)
+    }
+    
+    func setupTimeView() {
+        timeScrollView = UIScrollView.newAutoLayoutView()
+        bottomView.addSubview(timeScrollView)
+        timeContentView = UIView.newAutoLayoutView()
+        timeScrollView.addSubview(timeContentView)
+    }
+    
+    func setupStartTimeSlider() {
+        startTimeSlider = UISlider.newAutoLayoutView()
+        startTimeSlider.continuous = false
+        timeContentView.addSubview(startTimeSlider)
+    }
+    
+    func setupSliderLabels() {
+        sliderLabel = UILabel.newAutoLayoutView()
+        sliderLabel.font = UIFont.systemFontOfSize(14)
+        sliderLabel.text = "Select a start date"
+        timeContentView.addSubview(sliderLabel)
+        
+        minSliderLabel = UILabel.newAutoLayoutView()
+        minSliderLabel.font = UIFont.systemFontOfSize(12)
+        timeContentView.addSubview(minSliderLabel)
+        
+        maxSliderLabel = UILabel.newAutoLayoutView()
+        maxSliderLabel.font = UIFont.systemFontOfSize(12)
+        timeContentView.addSubview(maxSliderLabel)
+        
+        timeScaleLabel = UILabel.newAutoLayoutView()
+        timeScaleLabel.font = UIFont.systemFontOfSize(14)
+        timeScaleLabel.text = "Select a time scale"
+        timeContentView.addSubview(timeScaleLabel)
+    }
+    
+    func setupTimeScaleControl() {
+        timeScaleControl = UISegmentedControl(items: ["All", "Week", "Month", "Year"])
+        timeScaleControl.translatesAutoresizingMaskIntoConstraints = false
+        timeScaleControl.selectedSegmentIndex = 0
+        timeContentView.addSubview(timeScaleControl)
     }
     
     // MARK: - Layout
@@ -132,12 +194,38 @@ class ResultsViewController: UIViewController {
             playerView.autoPinEdgesToSuperviewEdges()
             activityView.autoPinEdgesToSuperviewEdges()
             
-            resultsTable.autoPinEdgeToSuperviewEdge(.Bottom)
-            resultsTable.autoPinEdgeToSuperviewEdge(.Leading)
-            resultsTable.autoPinEdgeToSuperviewEdge(.Trailing)
-            resultsTable.autoPinEdge(.Top, toEdge: .Bottom, ofView: displayView)
-            resultsTable.autoMatchDimension(.Height, toDimension: .Height, ofView: displayView)
+            bottomView.autoPinEdgeToSuperviewEdge(.Bottom)
+            bottomView.autoPinEdgeToSuperviewEdge(.Leading)
+            bottomView.autoPinEdgeToSuperviewEdge(.Trailing)
+            bottomView.autoPinEdge(.Top, toEdge: .Bottom, ofView: displayView)
+            bottomView.autoMatchDimension(.Height, toDimension: .Height, ofView: displayView)
             
+            resultsTable.autoPinEdgesToSuperviewEdges()
+            timeScrollView.autoPinEdgesToSuperviewEdges()
+            timeContentView.autoPinEdgesToSuperviewEdges()
+            timeContentView.autoMatchDimension(.Width, toDimension: .Width, ofView: bottomView)
+            
+            sliderLabel.autoPinEdgeToSuperviewEdge(.Leading, withInset: sliderSpacing)
+            sliderLabel.autoPinEdgeToSuperviewEdge(.Top, withInset: 10)
+            
+            startTimeSlider.autoPinEdge(.Top, toEdge: .Bottom, ofView: sliderLabel)
+            startTimeSlider.autoPinEdgeToSuperviewEdge(.Leading, withInset: sliderSpacing)
+            startTimeSlider.autoPinEdgeToSuperviewEdge(.Trailing, withInset: sliderSpacing)
+            
+            minSliderLabel.autoPinEdgeToSuperviewEdge(.Leading, withInset: sliderSpacing)
+            minSliderLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: startTimeSlider)
+            maxSliderLabel.autoPinEdgeToSuperviewEdge(.Trailing, withInset: sliderSpacing)
+            maxSliderLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: startTimeSlider)
+            
+            timeScaleLabel.autoPinEdgeToSuperviewEdge(.Leading, withInset: sliderSpacing)
+            timeScaleLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: minSliderLabel, withOffset: 20)
+            
+            timeScaleControl.autoPinEdge(.Top, toEdge: .Bottom, ofView: timeScaleLabel, withOffset: 10)
+            timeScaleControl.autoPinEdgeToSuperviewEdge(.Bottom, withInset: 10)
+            timeScaleControl.autoAlignAxisToSuperviewAxis(.Vertical)
+            timeScaleControl.autoMatchDimension(.Width, toDimension: .Width, ofView: startTimeSlider)
+            timeScaleControl.autoSetDimension(.Height, toSize: 30)
+
             didSetupConstraints = true
         }
         
@@ -149,28 +237,47 @@ class ResultsViewController: UIViewController {
     func bindViewModel() {
         queryLabel.rac_text <~ viewModel.queryText
         
-        viewModel.segmentIndex <~ displayControl
+        playerView.rac_hidden <~ viewModel.playerViewHidden
+        resultsTable.rac_hidden <~ viewModel.playerViewHidden
+        activityView.rac_hidden <~ viewModel.activityViewHidden
+        timeScrollView.rac_hidden <~ viewModel.activityViewHidden
+        
+        minSliderLabel.rac_text <~ viewModel.displayStartDate
+        maxSliderLabel.rac_text <~ viewModel.displayEndDate
+        
+        viewModel.displaySegmentIndex <~ displayControl
             .rac_signalForControlEvents(.ValueChanged)
             .toSignalProducer()
-            .flatMapError { _ in SignalProducer<AnyObject?, NoError>(value: "Default") }
+            .flatMapError { _ in SignalProducer<AnyObject?, NoError>(value: "Display Segment Error") }
             .map { sender in sender as! UISegmentedControl }
             .map { $0.selectedSegmentIndex }
         
-        playerView.rac_hidden <~ viewModel.playerViewHidden
-        activityView.rac_hidden <~ viewModel.activityViewHidden
+        viewModel.startTimeSliderValue <~ startTimeSlider
+            .rac_signalForControlEvents(.ValueChanged)
+            .toSignalProducer()
+            .flatMapError { _ in SignalProducer<AnyObject?, NoError>(value: "Slider Error") }
+            .map { sender in sender as! UISlider }
+            .map { $0.value }
+        
+        viewModel.timeScaleIndex <~ timeScaleControl
+            .rac_signalForControlEvents(.ValueChanged)
+            .toSignalProducer()
+            .flatMapError { _ in SignalProducer<AnyObject?, NoError>(value: "Time Scale Segment Error") }
+            .map { sender in sender as! UISegmentedControl }
+            .map { $0.selectedSegmentIndex }
         
         viewModel.videos.producer
-            .observeOn(QueueScheduler.mainQueueScheduler)
-            .startWithNext { [unowned self] data in
-                self.results = data
-                self.resultsTable.reloadData()
+            .observeOn(UIScheduler())
+            .startWithNext { [weak self] data in
+                self?.results = data
+                self?.resultsTable.reloadData()
             }
         
         viewModel.lineChartData.producer
-            .observeOn(QueueScheduler.mainQueueScheduler)
-            .startWithNext { [unowned self] data in
-                self.activityView.data = data
-                self.activityView.notifyDataSetChanged()
+            .observeOn(UIScheduler())
+            .startWithNext { [weak self] data in
+                self?.activityView.data = data
+                self?.activityView.notifyDataSetChanged()
             }
     }
 }

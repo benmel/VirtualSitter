@@ -11,11 +11,13 @@
 		B50076931CD0061D003BF7B4 /* PickerViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50076921CD0061D003BF7B4 /* PickerViewDataSource.swift */; };
 		B50076951CD0062D003BF7B4 /* PickerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50076941CD0062D003BF7B4 /* PickerViewDelegate.swift */; };
 		B50076971CD01871003BF7B4 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50076961CD01871003BF7B4 /* DataStore.swift */; };
+		B515F1341CF1848E00ED4455 /* EventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B515F1331CF1848E00ED4455 /* EventParser.swift */; };
 		B52FB0191CEE3E01003E4441 /* VirtualSitterAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52FB0181CEE3E01003E4441 /* VirtualSitterAPI.swift */; };
 		B53BE1C81CED25EE0058FEF0 /* ResultsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BE1C71CED25EE0058FEF0 /* ResultsViewModel.swift */; };
 		B53BE1CB1CED27520058FEF0 /* VirtualSitterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BE1CA1CED27520058FEF0 /* VirtualSitterService.swift */; };
 		B53BE1CE1CED27C20058FEF0 /* UIKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BE1CD1CED27C20058FEF0 /* UIKitExtensions.swift */; };
 		B53BE1D21CEE12450058FEF0 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BE1D11CEE12450058FEF0 /* Video.swift */; };
+		B554D0961CF1575800A00658 /* EventData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B554D0951CF1575800A00658 /* EventData.swift */; };
 		B56A4C4A1CEF6617003CC3A6 /* KinectEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56A4C491CEF6617003CC3A6 /* KinectEvent.swift */; };
 		B581AF8A1CD14354002449E6 /* SearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B581AF891CD14354002449E6 /* SearchTextField.swift */; };
 		B5AFA64F1CC0883100B358A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA64E1CC0883100B358A2 /* AppDelegate.swift */; };
@@ -52,11 +54,13 @@
 		B50076921CD0061D003BF7B4 /* PickerViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerViewDataSource.swift; sourceTree = "<group>"; };
 		B50076941CD0062D003BF7B4 /* PickerViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerViewDelegate.swift; sourceTree = "<group>"; };
 		B50076961CD01871003BF7B4 /* DataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
+		B515F1331CF1848E00ED4455 /* EventParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventParser.swift; sourceTree = "<group>"; };
 		B52FB0181CEE3E01003E4441 /* VirtualSitterAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualSitterAPI.swift; sourceTree = "<group>"; };
 		B53BE1C71CED25EE0058FEF0 /* ResultsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsViewModel.swift; sourceTree = "<group>"; };
 		B53BE1CA1CED27520058FEF0 /* VirtualSitterService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualSitterService.swift; sourceTree = "<group>"; };
 		B53BE1CD1CED27C20058FEF0 /* UIKitExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIKitExtensions.swift; sourceTree = "<group>"; };
 		B53BE1D11CEE12450058FEF0 /* Video.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
+		B554D0951CF1575800A00658 /* EventData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventData.swift; sourceTree = "<group>"; };
 		B56A4C491CEF6617003CC3A6 /* KinectEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KinectEvent.swift; sourceTree = "<group>"; };
 		B581AF891CD14354002449E6 /* SearchTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTextField.swift; sourceTree = "<group>"; };
 		B5AFA64B1CC0883100B358A2 /* VirtualSitter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualSitter.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,6 +141,8 @@
 				B52FB0181CEE3E01003E4441 /* VirtualSitterAPI.swift */,
 				B53BE1D11CEE12450058FEF0 /* Video.swift */,
 				B56A4C491CEF6617003CC3A6 /* KinectEvent.swift */,
+				B554D0951CF1575800A00658 /* EventData.swift */,
+				B515F1331CF1848E00ED4455 /* EventParser.swift */,
 			);
 			name = Service;
 			sourceTree = "<group>";
@@ -433,10 +439,12 @@
 				B53BE1CE1CED27C20058FEF0 /* UIKitExtensions.swift in Sources */,
 				B581AF8A1CD14354002449E6 /* SearchTextField.swift in Sources */,
 				B5F0690C1CC7D9C900ACE75D /* SearchView.swift in Sources */,
+				B554D0961CF1575800A00658 /* EventData.swift in Sources */,
 				B53BE1D21CEE12450058FEF0 /* Video.swift in Sources */,
 				B53BE1CB1CED27520058FEF0 /* VirtualSitterService.swift in Sources */,
 				B50076931CD0061D003BF7B4 /* PickerViewDataSource.swift in Sources */,
 				B5AFA6511CC0883100B358A2 /* SearchViewController.swift in Sources */,
+				B515F1341CF1848E00ED4455 /* EventParser.swift in Sources */,
 				B56A4C4A1CEF6617003CC3A6 /* KinectEvent.swift in Sources */,
 				B5AFA64F1CC0883100B358A2 /* AppDelegate.swift in Sources */,
 				B5DED1DE1CC96FC700266F8E /* ResultsViewController.swift in Sources */,

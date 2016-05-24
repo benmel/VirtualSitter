@@ -14,6 +14,11 @@ class SearchViewController: UIViewController {
     var searchView: SearchView!
     
     private let resultsSegueIdentifier = "ShowResults"
+    private let dateFormatter: NSDateFormatter = {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return dateFormatter
+    }()
     
     private var didSetupConstraints = false
     
@@ -45,7 +50,10 @@ class SearchViewController: UIViewController {
         if segue.identifier == resultsSegueIdentifier {
             let inputs = searchView.getInputs()
             let resultsViewController = segue.destinationViewController as! ResultsViewController
-            resultsViewController.viewModel = ResultsViewModel(virtualSitterService: VirtualSitterService(), startTime: inputs["startTime"]!, endTime: inputs["endTime"]!, room: inputs["room"]!, kinect: inputs["kinect"]!, floor: inputs["floor"]!, building: inputs["building"]!)
+            let startTime = dateFormatter.dateFromString(inputs["startTime"]!)!
+            let endTime = dateFormatter.dateFromString(inputs["endTime"]!)!
+            
+            resultsViewController.viewModel = ResultsViewModel(virtualSitterService: VirtualSitterService(), startTime: startTime, endTime: endTime, room: inputs["room"]!, kinect: inputs["kinect"]!, floor: inputs["floor"]!, building: inputs["building"]!)
         }
     }
 }

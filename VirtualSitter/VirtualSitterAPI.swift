@@ -10,8 +10,8 @@ import Foundation
 import Moya
 
 public enum VirtualSitter {
-    case Videos(startTime: String, endTime: String, room: String, kinect: String)
-    case Events(startTime: String, endTime: String, room: String, kinect: String, event: String)
+    case Videos(startTime: NSDate, endTime: NSDate, room: String, kinect: String)
+    case Events(startTime: NSDate, endTime: NSDate, room: String, kinect: String, event: String)
 }
 
 // MARK: - TargetType Protocol Implementation
@@ -52,6 +52,18 @@ extension VirtualSitter: TargetType {
 }
 
 // MARK: - Helpers
+
+private let dateFormatter: NSDateFormatter = {
+    let dateFormatter = NSDateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    return dateFormatter
+}()
+
+private extension NSDate {
+    var URLEscapedString: String {
+        return dateFormatter.stringFromDate(self).stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLHostAllowedCharacterSet())!
+    }
+}
 
 private extension String {
     var URLEscapedString: String {
