@@ -31,7 +31,8 @@ class ResultsViewController: UIViewController {
     private var playerView: UIView!
     private var activityView: LineChartView!
     private var resultsTable: UITableView!
-    private var sliderView: UIView!
+    private var timeScrollView: UIScrollView!
+    private var timeContentView: UIView!
     private var startTimeSlider: UISlider!
     private var sliderLabel: UILabel!
     private var minSliderLabel: UILabel!
@@ -58,7 +59,7 @@ class ResultsViewController: UIViewController {
         setupPlayerView()
         setupActivityView()
         setupResultsTable()
-        setupSliderView()
+        setupTimeView()
         setupStartTimeSlider()
         setupSliderLabels()
         setupTimeScaleControl()
@@ -127,42 +128,44 @@ class ResultsViewController: UIViewController {
         bottomView.addSubview(resultsTable)
     }
     
-    func setupSliderView() {
-        sliderView = UIView.newAutoLayoutView()
-        bottomView.addSubview(sliderView)
+    func setupTimeView() {
+        timeScrollView = UIScrollView.newAutoLayoutView()
+        bottomView.addSubview(timeScrollView)
+        timeContentView = UIView.newAutoLayoutView()
+        timeScrollView.addSubview(timeContentView)
     }
     
     func setupStartTimeSlider() {
         startTimeSlider = UISlider.newAutoLayoutView()
         startTimeSlider.continuous = false
-        sliderView.addSubview(startTimeSlider)
+        timeContentView.addSubview(startTimeSlider)
     }
     
     func setupSliderLabels() {
         sliderLabel = UILabel.newAutoLayoutView()
         sliderLabel.font = UIFont.systemFontOfSize(14)
         sliderLabel.text = "Select a start date"
-        sliderView.addSubview(sliderLabel)
+        timeContentView.addSubview(sliderLabel)
         
         minSliderLabel = UILabel.newAutoLayoutView()
         minSliderLabel.font = UIFont.systemFontOfSize(12)
-        sliderView.addSubview(minSliderLabel)
+        timeContentView.addSubview(minSliderLabel)
         
         maxSliderLabel = UILabel.newAutoLayoutView()
         maxSliderLabel.font = UIFont.systemFontOfSize(12)
-        sliderView.addSubview(maxSliderLabel)
+        timeContentView.addSubview(maxSliderLabel)
         
         timeScaleLabel = UILabel.newAutoLayoutView()
         timeScaleLabel.font = UIFont.systemFontOfSize(14)
         timeScaleLabel.text = "Select a time scale"
-        sliderView.addSubview(timeScaleLabel)
+        timeContentView.addSubview(timeScaleLabel)
     }
     
     func setupTimeScaleControl() {
         timeScaleControl = UISegmentedControl(items: ["All", "Week", "Month", "Year"])
         timeScaleControl.translatesAutoresizingMaskIntoConstraints = false
         timeScaleControl.selectedSegmentIndex = 0
-        sliderView.addSubview(timeScaleControl)
+        timeContentView.addSubview(timeScaleControl)
     }
     
     // MARK: - Layout
@@ -198,7 +201,9 @@ class ResultsViewController: UIViewController {
             bottomView.autoMatchDimension(.Height, toDimension: .Height, ofView: displayView)
             
             resultsTable.autoPinEdgesToSuperviewEdges()
-            sliderView.autoPinEdgesToSuperviewEdges()
+            timeScrollView.autoPinEdgesToSuperviewEdges()
+            timeContentView.autoPinEdgesToSuperviewEdges()
+            timeContentView.autoMatchDimension(.Width, toDimension: .Width, ofView: bottomView)
             
             sliderLabel.autoPinEdgeToSuperviewEdge(.Leading, withInset: sliderSpacing)
             sliderLabel.autoPinEdgeToSuperviewEdge(.Top, withInset: 10)
@@ -216,10 +221,11 @@ class ResultsViewController: UIViewController {
             timeScaleLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: minSliderLabel, withOffset: 20)
             
             timeScaleControl.autoPinEdge(.Top, toEdge: .Bottom, ofView: timeScaleLabel, withOffset: 10)
+            timeScaleControl.autoPinEdgeToSuperviewEdge(.Bottom, withInset: 10)
             timeScaleControl.autoAlignAxisToSuperviewAxis(.Vertical)
             timeScaleControl.autoMatchDimension(.Width, toDimension: .Width, ofView: startTimeSlider)
             timeScaleControl.autoSetDimension(.Height, toSize: 30)
-            
+
             didSetupConstraints = true
         }
         
@@ -234,7 +240,7 @@ class ResultsViewController: UIViewController {
         playerView.rac_hidden <~ viewModel.playerViewHidden
         resultsTable.rac_hidden <~ viewModel.playerViewHidden
         activityView.rac_hidden <~ viewModel.activityViewHidden
-        sliderView.rac_hidden <~ viewModel.activityViewHidden
+        timeScrollView.rac_hidden <~ viewModel.activityViewHidden
         
         minSliderLabel.rac_text <~ viewModel.displayStartDate
         maxSliderLabel.rac_text <~ viewModel.displayEndDate
