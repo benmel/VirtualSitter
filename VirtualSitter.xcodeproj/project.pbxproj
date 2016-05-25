@@ -28,6 +28,7 @@
 		B5AFA65C1CC0883100B358A2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5AFA65A1CC0883100B358A2 /* LaunchScreen.storyboard */; };
 		B5AFA6671CC0883100B358A2 /* VirtualSitterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA6661CC0883100B358A2 /* VirtualSitterTests.swift */; };
 		B5AFA6721CC0883100B358A2 /* VirtualSitterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA6711CC0883100B358A2 /* VirtualSitterUITests.swift */; };
+		B5B4206C1CF505B0005E0220 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B4206B1CF505B0005E0220 /* LoginViewController.swift */; };
 		B5DED1DE1CC96FC700266F8E /* ResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DED1DD1CC96FC700266F8E /* ResultsViewController.swift */; };
 		B5F0690C1CC7D9C900ACE75D /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F0690B1CC7D9C900ACE75D /* SearchView.swift */; };
 /* End PBXBuildFile section */
@@ -77,6 +78,7 @@
 		B5AFA66D1CC0883100B358A2 /* VirtualSitterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VirtualSitterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5AFA6711CC0883100B358A2 /* VirtualSitterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualSitterUITests.swift; sourceTree = "<group>"; };
 		B5AFA6731CC0883100B358A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B5B4206B1CF505B0005E0220 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		B5DED1DD1CC96FC700266F8E /* ResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsViewController.swift; sourceTree = "<group>"; };
 		B5F0690B1CC7D9C900ACE75D /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		B8D3A3153E5BD1998BEAC5E6 /* Pods-VirtualSitter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VirtualSitter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VirtualSitter/Pods-VirtualSitter.debug.xcconfig"; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 		B5DDF5821CCFB3180005A3FF /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B5B4206B1CF505B0005E0220 /* LoginViewController.swift */,
 				B5AFA6501CC0883100B358A2 /* SearchViewController.swift */,
 				B5DED1DD1CC96FC700266F8E /* ResultsViewController.swift */,
 			);
@@ -433,6 +436,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5B4206C1CF505B0005E0220 /* LoginViewController.swift in Sources */,
 				B52FB0191CEE3E01003E4441 /* VirtualSitterAPI.swift in Sources */,
 				B50076971CD01871003BF7B4 /* DataStore.swift in Sources */,
 				B53BE1C81CED25EE0058FEF0 /* ResultsViewModel.swift in Sources */,

@@ -18,6 +18,7 @@ import enum Result.NoError
 typealias NoError = Result.NoError
 
 class ResultsViewController: UIViewController {
+    
     var viewModel: ResultsViewModel!
     
     private let cellIdentifier = "TableCell"

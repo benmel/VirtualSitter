@@ -26,6 +26,13 @@ class SearchViewController: UIViewController {
         super.viewDidLoad()
         setupView()
     }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let loginViewController = LoginViewController()
+        presentViewController(loginViewController, animated: animated, completion: nil)
+    }
 
     func setupView() {
         searchView = SearchView.newAutoLayoutView()
