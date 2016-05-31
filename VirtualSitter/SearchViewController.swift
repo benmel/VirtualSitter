@@ -20,6 +20,7 @@ class SearchViewController: UIViewController {
         return dateFormatter
     }()
     
+    private var loginDisplayed = false
     private var didSetupConstraints = false
     
     override func viewDidLoad() {
@@ -30,8 +31,11 @@ class SearchViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        let loginViewController = LoginViewController()
-        presentViewController(loginViewController, animated: animated, completion: nil)
+        if !loginDisplayed {
+            let loginViewController = LoginViewController()
+            presentViewController(loginViewController, animated: animated, completion: nil)
+            loginDisplayed = true
+        }
     }
 
     func setupView() {

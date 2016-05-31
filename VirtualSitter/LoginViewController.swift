@@ -8,8 +8,11 @@
 
 import UIKit
 import PureLayout
+import ReactiveCocoa
 
 class LoginViewController: UIViewController {
+    
+    private var viewModel: LoginViewModel!
     
     private var loginView: UIView!
     private var registrationView: UIView!
@@ -29,8 +32,10 @@ class LoginViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel = LoginViewModel()
         setupView()
         view.setNeedsUpdateConstraints()
+        bindViewModel()
     }
     
     func setupView() {
@@ -43,7 +48,6 @@ class LoginViewController: UIViewController {
     
     func setupLoginView() {
         loginView = UIView.newAutoLayoutView()
-        loginView.hidden = true
         view.addSubview(loginView)
     }
     
@@ -117,7 +121,42 @@ class LoginViewController: UIViewController {
     func configureButton(button: UIButton, title: String) {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(title, forState: .Normal)
-        button.backgroundColor = .redColor()
+        button.backgroundColor = UIColor(red: 0.6, green: 0, blue: 1, alpha: 1)
+    }
+    
+    // MARK: - View Model
+    
+    func bindViewModel() {
+        loginView.rac_hidden <~ viewModel.loginViewHidden
+        registrationView.rac_hidden <~ viewModel.registrationViewHidden
+        
+        loginButton
+            .rac_signalForControlEvents(.TouchUpInside)
+            .toSignalProducer()
+            .startWithNext { [weak self] _ in
+                self?.dismissViewControllerAnimated(true, completion: nil)
+            }
+
+        registrationButton
+            .rac_signalForControlEvents(.TouchUpInside)
+            .toSignalProducer()
+            .startWithNext { [weak self] _ in
+                self?.dismissViewControllerAnimated(true, completion: nil)
+        }
+        
+        switchLoginButton
+            .rac_signalForControlEvents(.TouchUpInside)
+            .toSignalProducer()
+            .startWithNext { [weak self] _ in
+                self?.viewModel.switchView()
+            }
+        
+        switchRegistrationButton
+            .rac_signalForControlEvents(.TouchUpInside)
+            .toSignalProducer()
+            .startWithNext { [weak self] _ in
+                self?.viewModel.switchView()
+        }
     }
     
     // MARK: - Layout
@@ -127,12 +166,12 @@ class LoginViewController: UIViewController {
             loginView.autoPinEdgeToSuperviewEdge(.Top, withInset: 100)
             loginView.autoPinEdgeToSuperviewEdge(.Leading)
             loginView.autoPinEdgeToSuperviewEdge(.Trailing)
-            loginView.autoSetDimension(.Height, toSize: 200)
+            loginView.autoSetDimension(.Height, toSize: 300)
             
             registrationView.autoPinEdgeToSuperviewEdge(.Top, withInset: 100)
             registrationView.autoPinEdgeToSuperviewEdge(.Leading)
             registrationView.autoPinEdgeToSuperviewEdge(.Trailing)
-            registrationView.autoSetDimension(.Height, toSize: 200)
+            registrationView.autoSetDimension(.Height, toSize: 300)
             
             emailInput.autoPinEdgeToSuperviewEdge(.Top)
             emailInput.autoAlignAxisToSuperviewAxis(.Vertical)
