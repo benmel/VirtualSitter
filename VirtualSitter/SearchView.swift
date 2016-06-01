@@ -223,7 +223,7 @@ class SearchView: UIView {
         searchButton = UIButton(type: .Custom)
         searchButton.translatesAutoresizingMaskIntoConstraints = false
         searchButton.setTitle("Search", forState: .Normal)
-        searchButton.backgroundColor = .redColor()
+        searchButton.backgroundColor = UIColor(red: 0.6, green: 0, blue: 1, alpha: 1)
         searchButton.addTarget(self, action: #selector(searchButtonClicked), forControlEvents: .TouchUpInside)
         addSubview(searchButton)
     }
@@ -339,6 +339,15 @@ class SearchView: UIView {
     }
     
     // MARK: - Input Values
+    
+    func clearInputs() {
+        startTimeInput.text = ""
+        endTimeInput.text = ""
+        roomInput.text = ""
+        floorInput.text = ""
+        kinectInput.text = ""
+        buildingInput.text = ""
+    }
     
     func getInputs() -> [String: String] {
         var inputValues = [String: String]()

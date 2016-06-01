@@ -18,6 +18,7 @@ import enum Result.NoError
 typealias NoError = Result.NoError
 
 class ResultsViewController: UIViewController {
+    
     var viewModel: ResultsViewModel!
     
     private let cellIdentifier = "TableCell"
@@ -67,6 +68,7 @@ class ResultsViewController: UIViewController {
     
     func setupTopView() {
         topView = UIView.newAutoLayoutView()
+        topView.backgroundColor = UIColor(red: 0.85, green: 0.82, blue: 0.91, alpha: 1.0)
         view.addSubview(topView)
     }
     

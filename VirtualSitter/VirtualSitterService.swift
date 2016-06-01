@@ -34,4 +34,23 @@ class VirtualSitterService {
                 return jsonArray.map { KinectEvent(json: $0) }
             }
     }
+    
+    func signalForLogin(email: String, password: String) -> SignalProducer<Bool, Error> {
+        return provider.request(.Login(email: email, password: password))
+            .filterSuccessfulStatusCodes()
+            .map {
+                guard let result = String(data: $0.data, encoding: NSUTF8StringEncoding) else { return false }
+                return (result == "acceptted" || result == "pending") ? true : false
+            }
+    }
+    
+    func signalForRegistration(email: String, password: String) -> SignalProducer<Bool, Error> {
+        return provider.request(.Register(email: email, password: password))
+            .filterSuccessfulStatusCodes()
+            .map {
+                guard let result = String(data: $0.data, encoding: NSUTF8StringEncoding) else { return false }
+                return result == "success" ? true : false
+        }
+    }
+    
 }
