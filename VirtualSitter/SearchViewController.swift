@@ -44,7 +44,17 @@ class SearchViewController: UIViewController {
         view.addSubview(searchView)
         
         navigationItem.title = "Virtual Sitter"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Logout", style: .Plain, target: self, action: #selector(showLogin))
     }
+    
+    func showLogin(sender: UIBarButtonItem) {
+        let loginViewController = LoginViewController()
+        presentViewController(loginViewController, animated: true) { [weak self] in
+            self?.searchView.clearInputs()
+        }
+    }
+    
+    // MARK: - Layout
     
     override func updateViewConstraints() {
         if !didSetupConstraints {
@@ -55,7 +65,7 @@ class SearchViewController: UIViewController {
         super.updateViewConstraints()
     }
     
-    // MARK: Navigation
+    // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == resultsSegueIdentifier {

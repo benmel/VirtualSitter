@@ -340,6 +340,15 @@ class SearchView: UIView {
     
     // MARK: - Input Values
     
+    func clearInputs() {
+        startTimeInput.text = ""
+        endTimeInput.text = ""
+        roomInput.text = ""
+        floorInput.text = ""
+        kinectInput.text = ""
+        buildingInput.text = ""
+    }
+    
     func getInputs() -> [String: String] {
         var inputValues = [String: String]()
         inputValues["startTime"] = startTimeInput.text
