@@ -130,18 +130,24 @@ class LoginViewController: UIViewController {
         loginView.rac_hidden <~ viewModel.loginViewHidden
         registrationView.rac_hidden <~ viewModel.registrationViewHidden
         
+        viewModel.loginEmail <~ emailInput.rac_text
+        viewModel.loginPassword <~ passwordInput.rac_text
+        viewModel.registrationEmail <~ registrationEmailInput.rac_text
+        viewModel.registrationPassword <~ registrationPasswordInput.rac_text
+        viewModel.registrationPasswordConfirmation <~ registrationPasswordConfirmationInput.rac_text
+        
         loginButton
             .rac_signalForControlEvents(.TouchUpInside)
             .toSignalProducer()
             .startWithNext { [weak self] _ in
-                self?.dismissViewControllerAnimated(true, completion: nil)
+                self?.viewModel.login()
             }
 
         registrationButton
             .rac_signalForControlEvents(.TouchUpInside)
             .toSignalProducer()
             .startWithNext { [weak self] _ in
-                self?.dismissViewControllerAnimated(true, completion: nil)
+                self?.viewModel.register()
         }
         
         switchLoginButton
@@ -157,6 +163,16 @@ class LoginViewController: UIViewController {
             .startWithNext { [weak self] _ in
                 self?.viewModel.switchView()
         }
+        
+        viewModel.successfulLogin.producer
+            .startWithNext { [weak self] next in
+                if next { self?.dismissViewControllerAnimated(true, completion: nil) }
+            }
+        
+        viewModel.successfulRegistration.producer
+            .startWithNext { [weak self] next in
+                if next { self?.dismissViewControllerAnimated(true, completion: nil) }
+            }
     }
     
     // MARK: - Layout
