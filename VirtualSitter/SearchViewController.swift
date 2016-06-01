@@ -45,6 +45,7 @@ class SearchViewController: UIViewController {
         
         navigationItem.title = "Virtual Sitter"
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Logout", style: .Plain, target: self, action: #selector(showLogin))
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil)
     }
     
     func showLogin(sender: UIBarButtonItem) {

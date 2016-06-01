@@ -87,6 +87,7 @@ class ResultsViewController: UIViewController {
     func setupDisplayControl() {
         displayControl = UISegmentedControl(items: ["Video", "Activity"])
         displayControl.translatesAutoresizingMaskIntoConstraints = false
+        displayControl.tintColor = UIColor(red: 0.6, green: 0, blue: 1, alpha: 1)
         displayControl.selectedSegmentIndex = 0
         topView.addSubview(displayControl)
     }
@@ -166,6 +167,7 @@ class ResultsViewController: UIViewController {
     func setupTimeScaleControl() {
         timeScaleControl = UISegmentedControl(items: ["All", "Week", "Month", "Year"])
         timeScaleControl.translatesAutoresizingMaskIntoConstraints = false
+        timeScaleControl.tintColor = UIColor(red: 0.6, green: 0, blue: 1, alpha: 1)
         timeScaleControl.selectedSegmentIndex = 0
         timeContentView.addSubview(timeScaleControl)
     }
