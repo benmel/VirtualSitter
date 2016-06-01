@@ -240,11 +240,11 @@ class SearchView: UIView {
         if !didSetupConstraints {
             backgroundView.autoPinEdgesToSuperviewEdges()
             
-            labelsView.autoPinEdgeToSuperviewEdge(.Top, withInset: 70)
+            labelsView.autoPinEdgeToSuperviewEdge(.Top)
             labelsView.autoPinEdgeToSuperviewEdge(.Bottom, withInset: 70)
             labelsView.autoPinEdgeToSuperviewEdge(.Leading, withInset: 20)
             
-            inputsView.autoPinEdgeToSuperviewEdge(.Top, withInset: 70)
+            inputsView.autoPinEdgeToSuperviewEdge(.Top)
             inputsView.autoPinEdgeToSuperviewEdge(.Bottom, withInset: 70)
             inputsView.autoPinEdgeToSuperviewEdge(.Trailing, withInset: 10)
             
