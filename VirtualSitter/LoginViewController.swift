@@ -147,8 +147,10 @@ class LoginViewController: UIViewController {
             .rac_signalForControlEvents(.TouchUpInside)
             .toSignalProducer()
             .startWithNext { [weak self] _ in
-                self?.viewModel.register()
-        }
+                if let viewModel = self?.viewModel {
+                    viewModel.canRegister() ? viewModel.register() : self?.showAlert("Passwords don't match")
+                }
+            }
         
         switchLoginButton
             .rac_signalForControlEvents(.TouchUpInside)
@@ -163,16 +165,28 @@ class LoginViewController: UIViewController {
             .startWithNext { [weak self] _ in
                 self?.viewModel.switchView()
         }
-        
+
         viewModel.successfulLogin.producer
+            .observeOn(UIScheduler())
+            .skip(1) // don't show error before view is shown
             .startWithNext { [weak self] next in
-                if next { self?.dismissViewControllerAnimated(true, completion: nil) }
+                next ? self?.dismissViewControllerAnimated(true, completion: nil) : self?.showAlert("Login failed")
             }
         
         viewModel.successfulRegistration.producer
+            .observeOn(UIScheduler())
+            .skip(1) // don't show error before view is shown
             .startWithNext { [weak self] next in
-                if next { self?.dismissViewControllerAnimated(true, completion: nil) }
+                next ? self?.dismissViewControllerAnimated(true, completion: nil) : self?.showAlert("Registration failed")
             }
+    }
+    
+    // MARK: Alert
+    
+    func showAlert(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: nil))
+        presentViewController(alert, animated: true, completion: nil)
     }
     
     // MARK: - Layout

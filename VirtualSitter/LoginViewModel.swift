@@ -35,6 +35,10 @@ struct LoginViewModel {
             .flatMapError { _ in return SignalProducer<Bool, NoError>(value: false) }
     }
     
+    func canRegister() -> Bool {
+        return registrationPassword.value == registrationPasswordConfirmation.value
+    }
+    
     func register() {
         successfulRegistration <~ virtualSitterService.signalForRegistration(registrationEmail.value, password: registrationPassword.value)
             .flatMapError { _ in return SignalProducer<Bool, NoError>(value: false) }
