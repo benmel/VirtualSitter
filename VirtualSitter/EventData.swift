@@ -16,4 +16,10 @@ struct EventData {
     let sit: [Int]
     let sleep: [Int]
     let watch: [Int]
+    let eatSum: Int
+    let fallSum: Int
+    let noneSum: Int
+    let sitSum: Int
+    let sleepSum: Int
+    let watchSum: Int
 }

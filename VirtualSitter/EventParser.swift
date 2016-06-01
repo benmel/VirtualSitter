@@ -74,7 +74,14 @@ class EventParser {
             }
         }
         
-        return EventData(days: days, eat: eat, fall: fall, none: none, sit: sit, sleep: sleep, watch: watch)
+        let eatSum = eat.reduce(0, combine: +)
+        let fallSum = fall.reduce(0, combine: +)
+        let noneSum = none.reduce(0, combine: +)
+        let sitSum = sit.reduce(0, combine: +)
+        let sleepSum = sleep.reduce(0, combine: +)
+        let watchSum = watch.reduce(0, combine: +)
+        
+        return EventData(days: days, eat: eat, fall: fall, none: none, sit: sit, sleep: sleep, watch: watch, eatSum: eatSum, fallSum: fallSum, noneSum: noneSum, sitSum: sitSum, sleepSum: sleepSum, watchSum: watchSum)
     }
     
     static func getLineChartData(eventData: EventData, startTime: NSDate, endTime: NSDate) -> LineChartData {
@@ -86,7 +93,9 @@ class EventParser {
         var sleep = [Int]()
         var watch = [Int]()
         
-        func getChartDataSet(eventCounts: [Int], label: String, color: UIColor) -> ChartDataSet {
+        func getChartDataSet(eventCounts: [Int], sum: Int, label: String, color: UIColor) -> ChartDataSet {
+            if sum == 0 { return LineChartDataSet() }
+            
             var yVals = [ChartDataEntry]()
             for (index, element) in eventCounts.enumerate() {
                 yVals.append(ChartDataEntry(value: Double(element), xIndex: index))
@@ -113,12 +122,12 @@ class EventParser {
         }
         
         let xVals = days.map { shortDateFormatter.stringFromDate($0) }
-        let eatData = getChartDataSet(eat, label: "Eat", color: .redColor())
-        let fallData = getChartDataSet(fall, label: "Fall", color: .orangeColor())
-        let noneData = getChartDataSet(none, label: "None", color: .yellowColor())
-        let sitData = getChartDataSet(sit, label: "Sit", color: .greenColor())
-        let sleepData = getChartDataSet(sleep, label: "Sleep", color: .blueColor())
-        let watchData = getChartDataSet(watch, label: "Watch", color: .purpleColor())
+        let eatData = getChartDataSet(eat, sum: eventData.eatSum, label: "Eat", color: .redColor())
+        let fallData = getChartDataSet(fall, sum: eventData.fallSum, label: "Fall", color: .orangeColor())
+        let noneData = getChartDataSet(none, sum: eventData.noneSum, label: "None", color: .yellowColor())
+        let sitData = getChartDataSet(sit, sum: eventData.sitSum, label: "Sit", color: .greenColor())
+        let sleepData = getChartDataSet(sleep, sum: eventData.sleepSum, label: "Sleep", color: .blueColor())
+        let watchData = getChartDataSet(watch, sum: eventData.watchSum, label: "Watch", color: .purpleColor())
         
         return LineChartData(xVals: xVals, dataSets: [eatData, fallData, noneData, sitData, sleepData, watchData])
     }
