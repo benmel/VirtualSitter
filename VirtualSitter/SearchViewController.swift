@@ -114,6 +114,7 @@ class SearchViewController: UIViewController {
         patientSearchButton.translatesAutoresizingMaskIntoConstraints = false
         patientSearchButton.setTitle("Search", forState: .Normal)
         patientSearchButton.backgroundColor = UIColor(red: 0.6, green: 0, blue: 1, alpha: 1)
+        patientSearchButton.addTarget(self, action: #selector(patientSearchButtonClicked), forControlEvents: .TouchUpInside)
         patientSearchView.addSubview(patientSearchButton)
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -122,6 +123,18 @@ class SearchViewController: UIViewController {
     
     func dismissKeyboard() {
         patientSearchView.endEditing(true)
+    }
+    
+    func patientSearchButtonClicked(sender: UIButton) {
+        if let patientText = patientInput.text, kinectText = kinectInput.text {
+            if !patientText.isEmpty && !kinectText.isEmpty {
+                
+            } else {
+                let alert = UIAlertController(title: "Error", message: "Enter a value for all inputs", preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                presentViewController(alert, animated: true, completion: nil)
+            }
+        }
     }
     
     // MARK: - Layout
@@ -220,9 +233,9 @@ extension SearchViewController: SearchViewDelegate {
         if inputsValid() {
             performSegueWithIdentifier(resultsSegueIdentifier, sender: sender)
         } else {
-            let alert = UIAlertController(title: nil, message: "Enter a value for all inputs", preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { _ in }))
-            presentViewController(alert, animated: true, completion: { _ in })
+            let alert = UIAlertController(title: "Error", message: "Enter a value for all inputs", preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+            presentViewController(alert, animated: true, completion: nil)
         }
     }
     
