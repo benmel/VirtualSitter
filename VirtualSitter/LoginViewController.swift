@@ -148,7 +148,7 @@ class LoginViewController: UIViewController {
             .toSignalProducer()
             .startWithNext { [weak self] _ in
                 if let viewModel = self?.viewModel {
-                    viewModel.canRegister() ? viewModel.register() : self?.showAlert("Passwords don't match")
+                    viewModel.canRegister() ? viewModel.register() : self?.showAlert("Error", message: "Passwords don't match")
                 }
             }
         
@@ -156,36 +156,52 @@ class LoginViewController: UIViewController {
             .rac_signalForControlEvents(.TouchUpInside)
             .toSignalProducer()
             .startWithNext { [weak self] _ in
-                self?.viewModel.switchView()
+                self?.viewModel.showRegistration()
             }
         
         switchRegistrationButton
             .rac_signalForControlEvents(.TouchUpInside)
             .toSignalProducer()
             .startWithNext { [weak self] _ in
-                self?.viewModel.switchView()
+                self?.viewModel.showLogin()
         }
-
-        viewModel.successfulLogin.producer
+        
+        viewModel.loginStatus.producer
             .observeOn(UIScheduler())
-            .skip(1) // don't show error before view is shown
             .startWithNext { [weak self] next in
-                next ? self?.dismissViewControllerAnimated(true, completion: nil) : self?.showAlert("Login failed")
+                switch next {
+                    case .Succeeded:
+                        self?.dismissViewControllerAnimated(true, completion: nil)
+                    case .Pending:
+                        self?.showAlert("Note", message: "User account is pending")
+                    case .Failed:
+                        self?.showAlert("Error", message: "Login failed")
+                    case .Unattempted:
+                        break
+                }
             }
         
-        viewModel.successfulRegistration.producer
+        viewModel.registrationStatus.producer
             .observeOn(UIScheduler())
-            .skip(1) // don't show error before view is shown
             .startWithNext { [weak self] next in
-                next ? self?.dismissViewControllerAnimated(true, completion: nil) : self?.showAlert("Registration failed")
+                switch next {
+                    case .Succeeded:
+                        self?.viewModel.clearInputs()
+                        self?.viewModel.showLogin()
+                        self?.showAlert("Note", message: "User account is pending")
+                    case .Failed:
+                        self?.showAlert("Error", message: "Registration failed")
+                    case .Unattempted:
+                        break
+                }
             }
     }
     
     // MARK: Alert
     
-    func showAlert(message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: nil))
+    func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
         presentViewController(alert, animated: true, completion: nil)
     }
     

@@ -11,6 +11,19 @@ import ReactiveCocoa
 import Moya
 import SwiftyJSON
 
+public enum LoginStatus {
+    case Succeeded
+    case Failed
+    case Pending
+    case Unattempted
+}
+
+public enum RegistrationStatus {
+    case Succeeded
+    case Failed
+    case Unattempted
+}
+
 class VirtualSitterService {
     private let provider = ReactiveCocoaMoyaProvider<VirtualSitter>()
     private let events = "eat,fall,none,sit,sleep,watch"
@@ -35,21 +48,28 @@ class VirtualSitterService {
             }
     }
     
-    func signalForLogin(email: String, password: String) -> SignalProducer<Bool, Error> {
+    func signalForLogin(email: String, password: String) -> SignalProducer<LoginStatus, Error> {
         return provider.request(.Login(email: email, password: password))
             .filterSuccessfulStatusCodes()
             .map {
-                guard let result = String(data: $0.data, encoding: NSUTF8StringEncoding) else { return false }
-                return (result == "acceptted" || result == "pending") ? true : false
+                guard let result = String(data: $0.data, encoding: NSUTF8StringEncoding) else { return LoginStatus.Failed }
+                switch result {
+                    case "acceptted":
+                        return LoginStatus.Succeeded
+                    case "pending":
+                        return LoginStatus.Pending
+                    default:
+                        return LoginStatus.Failed
+                }
             }
     }
     
-    func signalForRegistration(email: String, password: String) -> SignalProducer<Bool, Error> {
+    func signalForRegistration(email: String, password: String) -> SignalProducer<RegistrationStatus, Error> {
         return provider.request(.Register(email: email, password: password))
             .filterSuccessfulStatusCodes()
             .map {
-                guard let result = String(data: $0.data, encoding: NSUTF8StringEncoding) else { return false }
-                return result == "success" ? true : false
+                guard let result = String(data: $0.data, encoding: NSUTF8StringEncoding) else { return RegistrationStatus.Failed }
+                return result == "success" ? RegistrationStatus.Succeeded : RegistrationStatus.Failed
         }
     }
     
