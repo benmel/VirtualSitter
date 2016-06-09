@@ -29,6 +29,7 @@
 		B5AFA65C1CC0883100B358A2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5AFA65A1CC0883100B358A2 /* LaunchScreen.storyboard */; };
 		B5AFA6671CC0883100B358A2 /* VirtualSitterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA6661CC0883100B358A2 /* VirtualSitterTests.swift */; };
 		B5AFA6721CC0883100B358A2 /* VirtualSitterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AFA6711CC0883100B358A2 /* VirtualSitterUITests.swift */; };
+		B5B0DA3A1CFF784000FE979E /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B0DA391CFF784000FE979E /* SearchViewModel.swift */; };
 		B5B4206C1CF505B0005E0220 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B4206B1CF505B0005E0220 /* LoginViewController.swift */; };
 		B5DED1DE1CC96FC700266F8E /* ResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DED1DD1CC96FC700266F8E /* ResultsViewController.swift */; };
 		B5F0690C1CC7D9C900ACE75D /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F0690B1CC7D9C900ACE75D /* SearchView.swift */; };
@@ -80,6 +81,7 @@
 		B5AFA66D1CC0883100B358A2 /* VirtualSitterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VirtualSitterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5AFA6711CC0883100B358A2 /* VirtualSitterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualSitterUITests.swift; sourceTree = "<group>"; };
 		B5AFA6731CC0883100B358A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B5B0DA391CFF784000FE979E /* SearchViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		B5B4206B1CF505B0005E0220 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		B5DED1DD1CC96FC700266F8E /* ResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsViewController.swift; sourceTree = "<group>"; };
 		B5F0690B1CC7D9C900ACE75D /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 			children = (
 				B53BE1C71CED25EE0058FEF0 /* ResultsViewModel.swift */,
 				B58D33AA1CF6143D00957C91 /* LoginViewModel.swift */,
+				B5B0DA391CFF784000FE979E /* SearchViewModel.swift */,
 			);
 			name = ViewModels;
 			sourceTree = "<group>";
@@ -445,6 +448,7 @@
 				B53BE1C81CED25EE0058FEF0 /* ResultsViewModel.swift in Sources */,
 				B53BE1CE1CED27C20058FEF0 /* UIKitExtensions.swift in Sources */,
 				B581AF8A1CD14354002449E6 /* SearchTextField.swift in Sources */,
+				B5B0DA3A1CFF784000FE979E /* SearchViewModel.swift in Sources */,
 				B5F0690C1CC7D9C900ACE75D /* SearchView.swift in Sources */,
 				B554D0961CF1575800A00658 /* EventData.swift in Sources */,
 				B53BE1D21CEE12450058FEF0 /* Video.swift in Sources */,

@@ -8,10 +8,23 @@
 
 import UIKit
 import PureLayout
+import ReactiveCocoa
 
 class SearchViewController: UIViewController {
 
-    var searchView: SearchView!
+    private var viewModel: SearchViewModel!
+    
+    private var displayControl: UISegmentedControl!
+    private var searchView: SearchView!
+    
+    private var patientSearchView: UIView!
+    private var labelsView: UIView!
+    private var inputsView: UIView!
+    private var patientLabel: UILabel!
+    private var kinectLabel: UILabel!
+    private var patientInput: UITextField!
+    private var kinectInput: UITextField!
+    private var patientSearchButton: UIButton!
     
     private let resultsSegueIdentifier = "ShowResults"
     private let dateFormatter: NSDateFormatter = {
@@ -25,7 +38,9 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel = SearchViewModel()
         setupView()
+        bindViewModel()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -39,9 +54,10 @@ class SearchViewController: UIViewController {
     }
 
     func setupView() {
-        searchView = SearchView.newAutoLayoutView()
-        searchView.delegate = self
-        view.addSubview(searchView)
+        view.backgroundColor = UIColor(red: 0.85, green: 0.82, blue: 0.91, alpha: 1.0)
+        setupDisplayControl()
+        setupTimeSearchView()
+        setupPatientView()
         
         navigationItem.title = "Virtual Sitter"
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Logout", style: .Plain, target: self, action: #selector(showLogin))
@@ -55,15 +71,145 @@ class SearchViewController: UIViewController {
         }
     }
     
+    func setupDisplayControl() {
+        displayControl = UISegmentedControl(items: ["Time Search", "Patient Search"])
+        displayControl.translatesAutoresizingMaskIntoConstraints = false
+        displayControl.tintColor = UIColor(red: 0.6, green: 0, blue: 1, alpha: 1)
+        displayControl.selectedSegmentIndex = 0
+        view.addSubview(displayControl)
+    }
+    
+    func setupTimeSearchView() {
+        searchView = SearchView.newAutoLayoutView()
+        searchView.delegate = self
+        view.addSubview(searchView)
+    }
+    
+    func setupPatientView() {
+        patientSearchView = UIView.newAutoLayoutView()
+        view.addSubview(patientSearchView)
+        
+        labelsView = UIView.newAutoLayoutView()
+        inputsView = UIView.newAutoLayoutView()
+        patientSearchView.addSubview(labelsView)
+        patientSearchView.addSubview(inputsView)
+        
+        patientLabel = UILabel.newAutoLayoutView()
+        patientLabel.text = "Patient ID"
+        labelsView.addSubview(patientLabel)
+        kinectLabel = UILabel.newAutoLayoutView()
+        kinectLabel.text = "Kinect"
+        labelsView.addSubview(kinectLabel)
+        
+        patientInput = UITextField.newAutoLayoutView()
+        patientInput.backgroundColor = .whiteColor()
+        patientInput.keyboardType = .NumberPad
+        inputsView.addSubview(patientInput)
+        kinectInput = UITextField.newAutoLayoutView()
+        kinectInput.backgroundColor = .whiteColor()
+        kinectInput.keyboardType = .NumberPad
+        inputsView.addSubview(kinectInput)
+        
+        patientSearchButton = UIButton(type: .Custom)
+        patientSearchButton.translatesAutoresizingMaskIntoConstraints = false
+        patientSearchButton.setTitle("Search", forState: .Normal)
+        patientSearchButton.backgroundColor = UIColor(red: 0.6, green: 0, blue: 1, alpha: 1)
+        patientSearchButton.addTarget(self, action: #selector(patientSearchButtonClicked), forControlEvents: .TouchUpInside)
+        patientSearchView.addSubview(patientSearchButton)
+        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        patientSearchView.addGestureRecognizer(tapRecognizer)
+    }
+    
+    func dismissKeyboard() {
+        patientSearchView.endEditing(true)
+    }
+    
+    func patientSearchButtonClicked(sender: UIButton) {
+        if let patientText = patientInput.text, kinectText = kinectInput.text {
+            if !patientText.isEmpty && !kinectText.isEmpty {
+                
+            } else {
+                let alert = UIAlertController(title: "Error", message: "Enter a value for all inputs", preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                presentViewController(alert, animated: true, completion: nil)
+            }
+        }
+    }
+    
     // MARK: - Layout
     
     override func updateViewConstraints() {
         if !didSetupConstraints {
-            searchView.autoPinEdgesToSuperviewEdges()
+            displayControl.autoPinToTopLayoutGuideOfViewController(self, withInset: 10)
+            displayControl.autoAlignAxisToSuperviewAxis(.Vertical)
+            displayControl.autoSetDimension(.Width, toSize: 200)
+            displayControl.autoSetDimension(.Height, toSize: 30)
+            
+            searchView.autoPinEdge(.Top, toEdge: .Bottom, ofView: displayControl, withOffset: 10)
+            searchView.autoPinEdgeToSuperviewEdge(.Leading)
+            searchView.autoPinEdgeToSuperviewEdge(.Trailing)
+            searchView.autoPinEdgeToSuperviewEdge(.Bottom)
+            
+            patientSearchView.autoPinEdge(.Top, toEdge: .Bottom, ofView: displayControl, withOffset: 10)
+            patientSearchView.autoPinEdgeToSuperviewEdge(.Leading)
+            patientSearchView.autoPinEdgeToSuperviewEdge(.Trailing)
+            patientSearchView.autoPinEdgeToSuperviewEdge(.Bottom)
+            
+            labelsView.autoPinEdgeToSuperviewEdge(.Top)
+            labelsView.autoPinEdgeToSuperviewEdge(.Bottom)
+            labelsView.autoPinEdgeToSuperviewEdge(.Leading, withInset: 20)
+            
+            inputsView.autoPinEdgeToSuperviewEdge(.Top)
+            inputsView.autoPinEdgeToSuperviewEdge(.Bottom)
+            inputsView.autoPinEdgeToSuperviewEdge(.Trailing, withInset: 10)
+            
+            inputsView.autoPinEdge(.Leading, toEdge: .Trailing, ofView: labelsView)
+            inputsView.autoMatchDimension(.Width, toDimension: .Width, ofView: labelsView, withMultiplier: 1.5)
+            
+            patientLabel.autoPinEdgeToSuperviewEdge(.Leading)
+            patientLabel.autoPinEdgeToSuperviewEdge(.Trailing)
+            kinectLabel.autoPinEdgeToSuperviewEdge(.Leading)
+            kinectLabel.autoPinEdgeToSuperviewEdge(.Trailing)
+            
+            patientLabel.autoSetDimension(.Height, toSize: 24)
+            kinectLabel.autoSetDimension(.Height, toSize: 24)
+            patientLabel.autoPinEdgeToSuperviewEdge(.Top, withInset: 30)
+            kinectLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: patientLabel, withOffset: 30)
+            
+            patientInput.autoPinEdgeToSuperviewMargin(.Leading)
+            patientInput.autoPinEdgeToSuperviewMargin(.Trailing)
+            kinectInput.autoPinEdgeToSuperviewMargin(.Leading)
+            kinectInput.autoPinEdgeToSuperviewMargin(.Trailing)
+            
+            patientInput.autoSetDimension(.Height, toSize: 24)
+            kinectInput.autoSetDimension(.Height, toSize: 24)
+            patientInput.autoPinEdgeToSuperviewEdge(.Top, withInset: 30)
+            kinectInput.autoPinEdge(.Top, toEdge: .Bottom, ofView: patientInput, withOffset: 30)
+            
+            patientSearchButton.autoAlignAxisToSuperviewAxis(.Vertical)
+            patientSearchButton.autoPinEdge(.Top, toEdge: .Bottom, ofView: kinectInput, withOffset: 30)
+            patientSearchButton.autoSetDimension(.Height, toSize: 40)
+            patientSearchButton.autoSetDimension(.Width, toSize: 100)
+            
             didSetupConstraints = true
         }
         
         super.updateViewConstraints()
+    }
+    
+    // MARK: - View Model
+    
+    func bindViewModel() {
+        searchView.rac_hidden <~ viewModel.timeSearchViewHidden
+        patientSearchView.rac_hidden <~ viewModel.patientSearchViewHidden
+        
+        viewModel.displaySegmentIndex <~ displayControl
+            .rac_signalForControlEvents(.ValueChanged)
+            .toSignalProducer()
+            .flatMapError { _ in SignalProducer<AnyObject?, NoError>(value: "Display Segment Error") }
+            .map { sender in sender as! UISegmentedControl }
+            .map { $0.selectedSegmentIndex }
     }
     
     // MARK: - Navigation
@@ -87,9 +233,9 @@ extension SearchViewController: SearchViewDelegate {
         if inputsValid() {
             performSegueWithIdentifier(resultsSegueIdentifier, sender: sender)
         } else {
-            let alert = UIAlertController(title: nil, message: "Enter a value for all inputs", preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { _ in }))
-            presentViewController(alert, animated: true, completion: { _ in })
+            let alert = UIAlertController(title: "Error", message: "Enter a value for all inputs", preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+            presentViewController(alert, animated: true, completion: nil)
         }
     }
     
