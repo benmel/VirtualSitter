@@ -25,16 +25,25 @@ class ResultsViewModel {
     let timeScaleIndex = MutableProperty<Int>(0)
     
     let videos = MutableProperty<[Video]>([Video]())
+    let selectedURL = MutableProperty<NSURL>(NSURL(string: "")!)
+    
     private let eventData = MutableProperty<EventData?>(nil)
     let lineChartData = MutableProperty<LineChartData?>(nil)
     
+    private let baseURL = NSURL(string: "http://129.105.36.182")!
+    private let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
+    private let shortDateFormatter: NSDateFormatter = {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        return dateFormatter
+    }()
+    private let longDateFormatter: NSDateFormatter = {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return dateFormatter
+    }()
+    
     init(virtualSitterService: VirtualSitterService, startTime: NSDate, endTime: NSDate, room: String, kinect: String, floor: String, building: String) {
-        
-        let shortDateFormatter = NSDateFormatter()
-        shortDateFormatter.dateFormat = "yyyy-MM-dd"
-        let longDateFormatter = NSDateFormatter()
-        longDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
         
         func getStartDate(sliderValue: Float, days: [NSDate], queryStartDate: NSDate) -> NSDate {
             if days.count == 0 {
@@ -75,6 +84,11 @@ class ResultsViewModel {
             .retry(5)
             .flatMapError { _ in return SignalProducer<[Video], NoError>.empty }
         
+        videos.producer
+            .startWithNext { [unowned self] data in
+                if data.count > 0 { self.selectedVideosRow(0) }
+            }
+        
         eventData <~ self.virtualSitterService.signalForEventSearch(startTime, endTime: endTime, room: room, kinect: kinect)
             .observeOn(QueueScheduler())
             .retry(5)
@@ -97,5 +111,21 @@ class ResultsViewModel {
     
     func videosCount() -> Int {
         return videos.value.count
+    }
+    
+    func selectedVideosRow(row: Int) {
+        let video = videos.value[row]
+        let trimmedFilePath = video.filePath.stringByTrimmingCharactersInSet(.whitespaceAndNewlineCharacterSet())
+        // filePath sometimes contains dateDirectory already
+        if trimmedFilePath.containsString("/") {
+            let videoDirectory = "data/\(trimmedFilePath)"
+            selectedURL.swap(baseURL.URLByAppendingPathComponent(videoDirectory))
+        } else if let videoDate = longDateFormatter.dateFromString(video.startTime) {
+            let dateDirectory = shortDateFormatter.stringFromDate(videoDate)
+            let videoDirectory = "data/\(dateDirectory)/\(trimmedFilePath)"
+            selectedURL.swap(baseURL.URLByAppendingPathComponent(videoDirectory))
+        } else {
+            selectedURL.swap(NSURL(string: "")!)
+        }
     }
 }

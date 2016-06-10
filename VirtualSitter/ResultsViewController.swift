@@ -27,6 +27,7 @@ class ResultsViewController: UIViewController {
     private var displayControl: UISegmentedControl!
     private var displayView: UIView!
     private var playerView: UIView!
+    private var playerViewController: AVPlayerViewController!
     private var activityView: LineChartView!
     private var resultsTable: UITableView!
     private var timeScrollView: UIScrollView!
@@ -47,6 +48,11 @@ class ResultsViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         bindViewModel()
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        playerViewController.player = nil
     }
     
     func setupViews() {
@@ -98,11 +104,8 @@ class ResultsViewController: UIViewController {
     
     // TODO: - Change video player in table view delegate
     func setupPlayerView() {
-        let url = NSURL(string: "http://129.105.36.182/webfile/testvideo/20150304_172923.mp4")
-        let player = AVPlayer(URL: url!)
-//        let player = AVPlayer()
-        let playerViewController = AVPlayerViewController()
-        playerViewController.player = player
+        playerViewController = AVPlayerViewController()
+        playerViewController.player = AVPlayer(URL: NSURL(string: "")!) // Need URL to avoid Auto Layout warnings
         playerView = playerViewController.view
         playerView.translatesAutoresizingMaskIntoConstraints = false
         addChildViewController(playerViewController)
@@ -271,8 +274,15 @@ class ResultsViewController: UIViewController {
         
         viewModel.videos.producer
             .observeOn(UIScheduler())
-            .startWithNext { [weak self] data in
+            .startWithNext { [weak self] _ in
                 self?.resultsTable.reloadData()
+            }
+        
+        viewModel.selectedURL.producer
+            .observeOn(UIScheduler())
+            .startWithNext { [weak self] url in
+                self?.playerViewController.player = nil
+                self?.playerViewController.player = AVPlayer(URL: url)
             }
         
         viewModel.lineChartData.producer
@@ -298,6 +308,6 @@ extension ResultsViewController: UITableViewDataSource {
 
 extension ResultsViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        viewModel.selectedVideosRow(indexPath.row)
     }
 }
