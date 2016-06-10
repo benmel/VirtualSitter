@@ -20,7 +20,6 @@ class SearchView: UIView {
     private var backgroundView: UIView!
     private var labelsView: UIView!
     private var inputsView: UIView!
-    private var tapRecognizer: UITapGestureRecognizer!
     
     private var startTimeLabel: UILabel!
     private var endTimeLabel: UILabel!
@@ -93,7 +92,7 @@ class SearchView: UIView {
         backgroundView.backgroundColor = UIColor(red: 0.85, green: 0.82, blue: 0.91, alpha: 1.0)
         addSubview(backgroundView)
         
-        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         addGestureRecognizer(tapRecognizer)
     }
     

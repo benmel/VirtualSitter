@@ -44,6 +44,9 @@ class LoginViewController: UIViewController {
         setupRegistrationView()
         setupInputs()
         setupButtons()
+        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapRecognizer)
     }
     
     func setupLoginView() {
@@ -122,6 +125,10 @@ class LoginViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(title, forState: .Normal)
         button.backgroundColor = UIColor(red: 0.6, green: 0, blue: 1, alpha: 1)
+    }
+    
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     // MARK: - View Model
