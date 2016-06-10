@@ -21,9 +21,6 @@ class ResultsViewController: UIViewController {
     
     var viewModel: ResultsViewModel!
     
-    private let cellIdentifier = "TableCell"
-    private var results = [Video]()
-    
     private var topView: UIView!
     private var bottomView: UIView!
     private var queryLabel: UILabel!
@@ -41,6 +38,7 @@ class ResultsViewController: UIViewController {
     private var timeScaleLabel: UILabel!
     private var timeScaleControl: UISegmentedControl!
     
+    private let cellIdentifier = "TableCell"
     private let sliderSpacing: CGFloat = 40
     
     private var didSetupConstraints = false
@@ -274,7 +272,6 @@ class ResultsViewController: UIViewController {
         viewModel.videos.producer
             .observeOn(UIScheduler())
             .startWithNext { [weak self] data in
-                self?.results = data
                 self?.resultsTable.reloadData()
             }
         
@@ -290,18 +287,17 @@ class ResultsViewController: UIViewController {
 extension ResultsViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as UITableViewCell
-        cell.textLabel?.text = results[indexPath.row].filePath
+        cell.textLabel?.text = viewModel.textForVideosRow(indexPath.row)
         return cell
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return results.count
+        return viewModel.videosCount()
     }
 }
 
 extension ResultsViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        selectedResult = results[indexPath.row]
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 }

@@ -24,7 +24,7 @@ extension VirtualSitter: TargetType {
     public var path: String {
         switch self {
         case .Videos(_, _, _, _):
-            return "/firstqueryVideo.php"
+            return "/mobile/firstqueryVideo.php"
         case .Events(_, _, _, _, _):
             return "/mobile/event_query.php"
         case .Login(_, _):

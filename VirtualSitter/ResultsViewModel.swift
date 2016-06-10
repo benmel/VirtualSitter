@@ -90,4 +90,12 @@ class ResultsViewModel {
                 return EventParser.getLineChartData(eventData!, startTime: startDate, endTime: endDate)
             }
     }
+    
+    func textForVideosRow(row: Int) -> String {
+        return videos.value[row].filePath
+    }
+    
+    func videosCount() -> Int {
+        return videos.value.count
+    }
 }
