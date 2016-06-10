@@ -21,15 +21,13 @@ class ResultsViewController: UIViewController {
     
     var viewModel: ResultsViewModel!
     
-    private let cellIdentifier = "TableCell"
-    private var results = [Video]()
-    
     private var topView: UIView!
     private var bottomView: UIView!
     private var queryLabel: UILabel!
     private var displayControl: UISegmentedControl!
     private var displayView: UIView!
     private var playerView: UIView!
+    private var playerViewController: AVPlayerViewController!
     private var activityView: LineChartView!
     private var resultsTable: UITableView!
     private var timeScrollView: UIScrollView!
@@ -41,6 +39,7 @@ class ResultsViewController: UIViewController {
     private var timeScaleLabel: UILabel!
     private var timeScaleControl: UISegmentedControl!
     
+    private let cellIdentifier = "TableCell"
     private let sliderSpacing: CGFloat = 40
     
     private var didSetupConstraints = false
@@ -49,6 +48,11 @@ class ResultsViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         bindViewModel()
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        playerViewController.player = nil
     }
     
     func setupViews() {
@@ -100,11 +104,8 @@ class ResultsViewController: UIViewController {
     
     // TODO: - Change video player in table view delegate
     func setupPlayerView() {
-        let url = NSURL(string: "http://129.105.36.182/webfile/testvideo/20150304_172923.mp4")
-        let player = AVPlayer(URL: url!)
-//        let player = AVPlayer()
-        let playerViewController = AVPlayerViewController()
-        playerViewController.player = player
+        playerViewController = AVPlayerViewController()
+        playerViewController.player = AVPlayer(URL: NSURL(string: "")!) // Need URL to avoid Auto Layout warnings
         playerView = playerViewController.view
         playerView.translatesAutoresizingMaskIntoConstraints = false
         addChildViewController(playerViewController)
@@ -273,9 +274,15 @@ class ResultsViewController: UIViewController {
         
         viewModel.videos.producer
             .observeOn(UIScheduler())
-            .startWithNext { [weak self] data in
-                self?.results = data
+            .startWithNext { [weak self] _ in
                 self?.resultsTable.reloadData()
+            }
+        
+        viewModel.selectedURL.producer
+            .observeOn(UIScheduler())
+            .startWithNext { [weak self] url in
+                self?.playerViewController.player = nil
+                self?.playerViewController.player = AVPlayer(URL: url)
             }
         
         viewModel.lineChartData.producer
@@ -290,18 +297,17 @@ class ResultsViewController: UIViewController {
 extension ResultsViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as UITableViewCell
-        cell.textLabel?.text = results[indexPath.row].filePath
+        cell.textLabel?.text = viewModel.textForVideosRow(indexPath.row)
         return cell
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return results.count
+        return viewModel.videosCount()
     }
 }
 
 extension ResultsViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        selectedResult = results[indexPath.row]
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        viewModel.selectedVideosRow(indexPath.row)
     }
 }
