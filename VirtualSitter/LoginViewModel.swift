@@ -19,20 +19,33 @@ struct LoginViewModel {
     let registrationPassword = MutableProperty<String>("")
     let registrationPasswordConfirmation = MutableProperty<String>("")
     
-    let successfulLogin = MutableProperty<Bool>(false)
-    let successfulRegistration = MutableProperty<Bool>(false)
+    let loginStatus = MutableProperty<LoginStatus>(LoginStatus.Unattempted)
+    let registrationStatus = MutableProperty<RegistrationStatus>(RegistrationStatus.Unattempted)
     
     let loginViewHidden = MutableProperty<Bool>(false)
     let registrationViewHidden = MutableProperty<Bool>(true)
     
-    func switchView() {
-        loginViewHidden.swap(!loginViewHidden.value)
-        registrationViewHidden.swap(!registrationViewHidden.value)
+    func clearInputs() {
+        loginEmail.swap("")
+        loginPassword.swap("")
+        registrationEmail.swap("")
+        registrationPassword.swap("")
+        registrationPasswordConfirmation.swap("")
+    }
+    
+    func showLogin() {
+        loginViewHidden.swap(false)
+        registrationViewHidden.swap(true)
+    }
+    
+    func showRegistration() {
+        loginViewHidden.swap(true)
+        registrationViewHidden.swap(false)
     }
     
     func login() {
-        successfulLogin <~ virtualSitterService.signalForLogin(loginEmail.value, password: loginPassword.value)
-            .flatMapError { _ in return SignalProducer<Bool, NoError>(value: false) }
+        loginStatus <~ virtualSitterService.signalForLogin(loginEmail.value, password: loginPassword.value)
+            .flatMapError { _ in return SignalProducer<LoginStatus, NoError>(value: LoginStatus.Failed) }
     }
     
     func canRegister() -> Bool {
@@ -40,7 +53,7 @@ struct LoginViewModel {
     }
     
     func register() {
-        successfulRegistration <~ virtualSitterService.signalForRegistration(registrationEmail.value, password: registrationPassword.value)
-            .flatMapError { _ in return SignalProducer<Bool, NoError>(value: false) }
+        registrationStatus <~ virtualSitterService.signalForRegistration(registrationEmail.value, password: registrationPassword.value)
+            .flatMapError { _ in return SignalProducer<RegistrationStatus, NoError>(value: RegistrationStatus.Failed) }
     }
 }

@@ -104,8 +104,9 @@ class EventParser {
             chartDataSet.setColor(color.colorWithAlphaComponent(0.5))
             chartDataSet.setCircleColor(color.colorWithAlphaComponent(0.7))
             chartDataSet.lineWidth = 2.0
-            chartDataSet.circleRadius = 4.0
+            chartDataSet.circleRadius = 3.0
             chartDataSet.drawValuesEnabled = false
+            chartDataSet.drawCircleHoleEnabled = false
             return chartDataSet
         }
         

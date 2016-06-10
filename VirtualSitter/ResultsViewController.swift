@@ -52,6 +52,7 @@ class ResultsViewController: UIViewController {
     }
     
     func setupViews() {
+        navigationItem.title = "Results"
         setupTopView()
         setupBottomView()
         setupQueryLabel()
@@ -80,7 +81,7 @@ class ResultsViewController: UIViewController {
     func setupQueryLabel() {
         queryLabel = UILabel.newAutoLayoutView()
         queryLabel.font = UIFont.systemFontOfSize(12)
-        queryLabel.numberOfLines = 2
+        queryLabel.numberOfLines = 3
         topView.addSubview(queryLabel)
     }
     
@@ -179,12 +180,12 @@ class ResultsViewController: UIViewController {
             topView.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
             topView.autoPinEdgeToSuperviewEdge(.Leading)
             topView.autoPinEdgeToSuperviewEdge(.Trailing)
-            topView.autoSetDimension(.Height, toSize: 80)
+            topView.autoSetDimension(.Height, toSize: 100)
             
             queryLabel.autoPinEdgeToSuperviewEdge(.Top, withInset: 5)
             queryLabel.autoAlignAxisToSuperviewAxis(.Vertical)
             queryLabel.autoMatchDimension(.Width, toDimension: .Width, ofView: topView, withOffset: -10)
-            queryLabel.autoSetDimension(.Height, toSize: 30)
+            queryLabel.autoSetDimension(.Height, toSize: 50)
             
             displayControl.autoPinEdgeToSuperviewEdge(.Bottom, withInset: 10)
             displayControl.autoAlignAxisToSuperviewAxis(.Vertical)

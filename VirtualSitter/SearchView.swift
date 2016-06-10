@@ -141,7 +141,7 @@ class SearchView: UIView {
         kinectInput.backgroundColor = .whiteColor()
         buildingInput.backgroundColor = .whiteColor()
         
-//        startTimeInput.text = "2015-02-22 00:51:36"
+//        startTimeInput.text = "2015-02-22 00:51:36" // for testing
         
         startTimeInput.delegate = self
         endTimeInput.delegate = self

@@ -62,6 +62,7 @@ class SearchViewController: UIViewController {
         navigationItem.title = "Virtual Sitter"
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Logout", style: .Plain, target: self, action: #selector(showLogin))
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil)
+        navigationController?.navigationBar.tintColor = UIColor(red: 0.6, green: 0, blue: 1, alpha: 1)
     }
     
     func showLogin(sender: UIBarButtonItem) {
@@ -104,10 +105,12 @@ class SearchViewController: UIViewController {
         patientInput = UITextField.newAutoLayoutView()
         patientInput.backgroundColor = .whiteColor()
         patientInput.keyboardType = .NumberPad
+        patientInput.layer.cornerRadius = 4
         inputsView.addSubview(patientInput)
         kinectInput = UITextField.newAutoLayoutView()
         kinectInput.backgroundColor = .whiteColor()
         kinectInput.keyboardType = .NumberPad
+        kinectInput.layer.cornerRadius = 4
         inputsView.addSubview(kinectInput)
         
         patientSearchButton = UIButton(type: .Custom)
