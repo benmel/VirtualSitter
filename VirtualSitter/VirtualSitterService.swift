@@ -38,6 +38,16 @@ class VirtualSitterService {
             }
     }
     
+    func signalForPatientVideoSearch(patient: String, kinect: String) -> SignalProducer<[Video], Error> {
+        return provider.request(.PatientVideos(patient: patient, kinect: kinect))
+            .observeOn(QueueScheduler())
+            .filterSuccessfulStatusCodes()
+            .map {
+                guard let jsonArray = JSON(data: $0.data).array else { return [Video]() }
+                return jsonArray.map { Video(json: $0) }
+        }
+    }
+    
     func signalForEventSearch(startTime: NSDate, endTime: NSDate, room: String, kinect: String) -> SignalProducer<[KinectEvent], Error> {
         return provider.request(.Events(startTime: startTime, endTime: endTime, room: room, kinect: kinect, event: events))
             .observeOn(QueueScheduler())
@@ -46,6 +56,16 @@ class VirtualSitterService {
                 guard let jsonArray = JSON(data: $0.data).array else { return [KinectEvent]() }
                 return jsonArray.map { KinectEvent(json: $0) }
             }
+    }
+    
+    func signalForPatientEventSearch(patient: String, kinect: String) -> SignalProducer<[KinectEvent], Error> {
+        return provider.request(.PatientEvents(patient: patient, kinect: kinect))
+            .observeOn(QueueScheduler())
+            .filterSuccessfulStatusCodes()
+            .map {
+                guard let jsonArray = JSON(data: $0.data).array else { return [KinectEvent]() }
+                return jsonArray.map { KinectEvent(json: $0) }
+        }
     }
     
     func signalForLogin(email: String, password: String) -> SignalProducer<LoginStatus, Error> {
