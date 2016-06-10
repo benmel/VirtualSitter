@@ -11,7 +11,9 @@ import Moya
 
 public enum VirtualSitter {
     case Videos(startTime: NSDate, endTime: NSDate, room: String, kinect: String)
+    case PatientVideos(patient: String, kinect: String)
     case Events(startTime: NSDate, endTime: NSDate, room: String, kinect: String, event: String)
+    case PatientEvents(patient: String, kinect: String)
     case Login(email: String, password: String)
     case Register(email: String, password: String)
 }
@@ -25,8 +27,12 @@ extension VirtualSitter: TargetType {
         switch self {
         case .Videos(_, _, _, _):
             return "/mobile/firstqueryVideo.php"
+        case .PatientVideos(_, _):
+            return "/mobile/patient_video_query.php"
         case .Events(_, _, _, _, _):
             return "/mobile/event_query.php"
+        case .PatientEvents(_, _):
+            return "/mobile/patient_event_query.php"
         case .Login(_, _):
             return "/mobile/login.php"
         case .Register(_, _):
@@ -42,8 +48,12 @@ extension VirtualSitter: TargetType {
         switch self {
         case .Videos(let startTime, let endTime, let room, let kinect):
             return ["from": startTime.URLEscapedString, "to": endTime.URLEscapedString, "room": room.URLEscapedString, "kinect": kinect.URLEscapedString]
+        case .PatientVideos(let patient, let kinect):
+            return ["patient_id": patient.URLEscapedString, "kinect_id": kinect.URLEscapedString]
         case .Events(let startTime, let endTime, let room, let kinect, let event):
             return ["start": startTime.URLEscapedString, "end": endTime.URLEscapedString, "room": room.URLEscapedString, "kinectId": kinect.URLEscapedString, "event": event.URLEscapedString]
+        case .PatientEvents(let patient, let kinect):
+            return ["patient_id": patient.URLEscapedString, "kinect_id": kinect.URLEscapedString]
         case .Login(let email, let password):
             return ["email": email, "password": password]
         case .Register(let email, let password):
@@ -55,8 +65,12 @@ extension VirtualSitter: TargetType {
         switch self {
         case .Videos(_, _, let room, let kinect):
             return "[{\"Start\": \"2015-03-13 13:15:04\", \"end\": \"2015-03-13 13:30:02\", \"RoomID\": \(room), \"KinectID\": \(kinect), \"FilePath\": \"Depth_20150312_130304_604.mp4\"}]".UTF8EncodedData
+        case .PatientVideos(_, let kinect):
+            return "[{\"Start\": \"2015-03-13 13:15:04\", \"end\": \"2015-03-13 13:30:02\", \"RoomID\": \"1236\", \"KinectID\": \(kinect), \"FilePath\": \"Depth_20150312_130304_604.mp4\"}]".UTF8EncodedData
         case .Events(_, _, _, _, let event):
             return "[{\"startTime\": \"2015-03-12 11:16:51\", \"endTime\": \"2015-03-12 11:16:51\", \"event\": \(event)}]".UTF8EncodedData
+        case .PatientEvents(_, _):
+            return "[{\"startTime\": \"2015-03-12 11:16:51\", \"endTime\": \"2015-03-12 11:16:51\", \"event\": \"Sit\"}]".UTF8EncodedData
         case .Login(_, _):
             return "acceptted".UTF8EncodedData // typo
         case .Register(_, _):
