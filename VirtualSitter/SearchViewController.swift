@@ -69,6 +69,8 @@ class SearchViewController: UIViewController {
         let loginViewController = LoginViewController()
         presentViewController(loginViewController, animated: true) { [weak self] in
             self?.searchView.clearInputs()
+            self?.patientInput.text = ""
+            self?.kinectInput.text = ""
         }
     }
     
@@ -131,7 +133,9 @@ class SearchViewController: UIViewController {
     func patientSearchButtonClicked(sender: UIButton) {
         if let patientText = patientInput.text, kinectText = kinectInput.text {
             if !patientText.isEmpty && !kinectText.isEmpty {
-                
+                let alert = UIAlertController(title: "Note", message: "Patient search is coming soon", preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                presentViewController(alert, animated: true, completion: nil)
             } else {
                 let alert = UIAlertController(title: "Error", message: "Enter a value for all inputs", preferredStyle: .Alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
