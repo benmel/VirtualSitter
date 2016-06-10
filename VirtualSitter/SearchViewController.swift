@@ -105,10 +105,12 @@ class SearchViewController: UIViewController {
         patientInput = UITextField.newAutoLayoutView()
         patientInput.backgroundColor = .whiteColor()
         patientInput.keyboardType = .NumberPad
+        patientInput.layer.cornerRadius = 4
         inputsView.addSubview(patientInput)
         kinectInput = UITextField.newAutoLayoutView()
         kinectInput.backgroundColor = .whiteColor()
         kinectInput.keyboardType = .NumberPad
+        kinectInput.layer.cornerRadius = 4
         inputsView.addSubview(kinectInput)
         
         patientSearchButton = UIButton(type: .Custom)

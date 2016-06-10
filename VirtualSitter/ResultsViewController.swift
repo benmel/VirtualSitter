@@ -52,6 +52,7 @@ class ResultsViewController: UIViewController {
     }
     
     func setupViews() {
+        navigationItem.title = "Results"
         setupTopView()
         setupBottomView()
         setupQueryLabel()
