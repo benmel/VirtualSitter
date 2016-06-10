@@ -139,7 +139,7 @@
 				B58D33AA1CF6143D00957C91 /* LoginViewModel.swift */,
 				B5B0DA391CFF784000FE979E /* SearchViewModel.swift */,
 			);
-			name = ViewModels;
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		B53BE1C91CED273C0058FEF0 /* Service */ = {
@@ -152,7 +152,7 @@
 				B554D0951CF1575800A00658 /* EventData.swift */,
 				B515F1331CF1848E00ED4455 /* EventParser.swift */,
 			);
-			name = Service;
+			path = Service;
 			sourceTree = "<group>";
 		};
 		B53BE1CC1CED27A50058FEF0 /* Util */ = {
@@ -160,7 +160,7 @@
 			children = (
 				B53BE1CD1CED27C20058FEF0 /* UIKitExtensions.swift */,
 			);
-			name = Util;
+			path = Util;
 			sourceTree = "<group>";
 		};
 		B58CD8771CDD74BB00671B28 /* Models */ = {
@@ -168,7 +168,7 @@
 			children = (
 				B50076961CD01871003BF7B4 /* DataStore.swift */,
 			);
-			name = Models;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		B5AFA6421CC0883100B358A2 = {
@@ -233,7 +233,7 @@
 				B5AFA6501CC0883100B358A2 /* SearchViewController.swift */,
 				B5DED1DD1CC96FC700266F8E /* ResultsViewController.swift */,
 			);
-			name = Controllers;
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		B5DDF5831CCFB31F0005A3FF /* Views */ = {
@@ -244,7 +244,7 @@
 				B50076921CD0061D003BF7B4 /* PickerViewDataSource.swift */,
 				B50076941CD0062D003BF7B4 /* PickerViewDelegate.swift */,
 			);
-			name = Views;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		B5DDF5841CCFB3260005A3FF /* Application */ = {
